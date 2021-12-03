@@ -27,6 +27,7 @@ htmlcov/
 package-lock.json
 package.json
 
+build/
 dependency-graphs/
 test-results/
 uml-diagrams/
