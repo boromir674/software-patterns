@@ -4,17 +4,17 @@ This module contains boiler-plate code to supply the Proxy structural software
 design pattern, to the client code."""
 
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Dict
+from typing import TypeVar, Generic
 
 T = TypeVar('T')
 
 
-__all__ = ['RealSubject', 'Proxy']
+__all__ = ['ProxySubject', 'Proxy']
 
 
 class ProxySubjectInterface(ABC, Generic[T]):
     """Proxy Subject interface holding the important 'request' operation.
-    
+
     Declares common operations for both ProxySubject and
     the Proxy. As long as the client uses ProxySubject's interface, a proxy can
     be passed pass to it, instead of a real subject.

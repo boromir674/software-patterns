@@ -1,7 +1,6 @@
 """Implementation of the object pool"""
 from typing import Dict, Generic, TypeVar, Any, Callable, Optional, Union
 import types
-from typing import Callable, Generic, Protocol, Any, Union, TypeVar, Dict
 
 
 __all__ = ['ObjectsPool']
@@ -9,10 +8,18 @@ __all__ = ['ObjectsPool']
 
 
 DictKey = Union[int, str]
-T = TypeVar('T')
+ObjectType = TypeVar('ObjectType')
+
+RuntimeBuildHashCallable = Callable[..., Union[int, str]]
 
 
-class ObjectsPool(Generic[T]):
+def adapt_build_hash(a_callable: RuntimeBuildHashCallable):
+    def build_hash(_self: ObjectType, *args, **kwargs):
+        return a_callable(*args, **kwargs)
+    return build_hash
+
+
+class ObjectsPool(Generic[ObjectType]):
     """Class of objects that are able to return a reference to an object upon request.
 
     Whenever an object is requested, it is checked whether it exists in the pool.
@@ -23,28 +30,25 @@ class ObjectsPool(Generic[T]):
         constructor (callable): able to construct the object given arguments
         objects (dict): the data structure representing the object pool
     """
-    constructor: Callable[..., T]
-    _build_hash: Callable[..., DictKey]
-    _objects: Dict[DictKey, T]
+    _objects: Dict[DictKey, ObjectType]
 
-    def __new__(cls, callback: Callable[..., T], hash_callback: Optional[Callable[..., Union[int, str]]]=None):
-        pool = super().__new__(cls)
-        pool.constructor = callback
-        def get_build_hash(hash_callback):
-            def build_hash(self, *args, **kwargs):
-                return hash_callback(*args, **kwargs)
-            return build_hash
+    user_supplied_callaback: Dict[bool, Callable] = {
+        True: lambda callback: callback,
+        False: lambda callback: ObjectsPool.__build_hash,
+    }
 
-        pool._build_hash = hash_callback if callable(hash_callback) else types.MethodType(get_build_hash(cls.__build_hash), pool)
-        pool._objects = {}
-        return pool
+    def __init__(self, callback: Callable[..., ObjectType], hash_callback: Optional[RuntimeBuildHashCallable]=None):
+        self.constructor = callback
+        build_hash_callback = self.user_supplied_callaback[callable(hash_callback)](hash_callback)
+        self._build_hash = types.MethodType(adapt_build_hash(build_hash_callback), self)
+        self._objects = {}
 
     @staticmethod
     def __build_hash(*args: Any, **kwargs: Any) -> int:
         r"""Construct a hash out of the input \*args and \*\*kwargs."""
         return hash('-'.join([str(_) for _ in args] + [f'{key}={str(value)}' for key, value in kwargs.items()]))
 
-    def get_object(self, *args: Any, **kwargs: Any) -> T:
+    def get_object(self, *args: Any, **kwargs: Any) -> ObjectType:
         r"""Request an object from the pool.
 
         Get or create an object given the input parameters. Existence in the pool is done using the
