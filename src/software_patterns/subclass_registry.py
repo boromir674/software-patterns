@@ -53,10 +53,9 @@ class SubclassRegistry(type, Generic[T]):
         >>> {k: v.__name__ for k, v in ParentClass.subclasses.items()}
         {'child': 'ChildClass'}
     """
-    def __new__(mcs, *args, **kwargs):
-        class_object = super().__new__(mcs, *args, **kwargs)
-        class_object.subclasses = {}
-        return class_object
+    def __init__(cls, *args):
+        super().__init__(*args)
+        cls.subclasses = {}
 
     def create(cls, subclass_identifier, *args, **kwargs) -> T:
         """Create an instance of a registered subclass, given its unique identifier and runtime (constructor) arguments.
