@@ -111,7 +111,7 @@ jobs:
       - checkout
       - run:
           name: Install the package from test.pypi.org
-          command: pip install --no-deps --index test.pypi.org software-patterns
+          command: pip install --no-deps --index-url https://test.pypi.org/simple/ software-patterns
       - run:
           name: Install pytest, which is used both in the test suite code and as a test runner
           command: pip install pytest
