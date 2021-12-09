@@ -88,7 +88,7 @@ jobs:
           name: Upload the code coverage measurements to codecov.io, resulted from running the test suite (unit tests)
           command: ./.codecov
 
-  deploy-to-staging:
+  testpypi-install-n-test:
     executor: py38-docker-image
     steps:
       - checkout
@@ -103,14 +103,24 @@ jobs:
           command: tox -e build -vv
       - run:
           name: Deploy package (source distro & wheel) to 'testpypi' (index) server
-          command: |
-            export SOFTWARE_PATTERNS_LIB_VERSION=$(python scripts/parse_package_version.py)
-            tox -e deploy -vv
+          command: tox -e deploy -vv
+
+ integration-test:
+    executor: py38-docker-image
+    steps:
+      - checkout
+      - run:
+          name: Install the package from test.pypi.org
+          command: pip install --no-deps --index test.pypi.org software-patterns
+      - run:
+          name: Install pytest, which is used both in the test suite code and as a test runner
+          command: pip install pytest
+      - run:
+          name: Run the test suite (unit-tests)
+          command: pytest tests -v
 
   visualize_code:
     executor: py38-docker-image
-    environment:
-      NST_DEPS_GRAPHS: dependency-graphs
     steps:
       - checkout
       - run: sudo apt-get update -y --allow-releaseinfo-change
@@ -162,8 +172,7 @@ workflows:
             branches:
               only:
                 - master
-                - dev
-                - release-staging
+                - visualize-code
 
       # - build-documentation:
       #     filters:
@@ -172,15 +181,15 @@ workflows:
       #           - master
       #           - dev
       #           - release-staging
-      # - deploy-to-staging:
-      #     requires:
-      #       - build_n_test
-      #     filters:
-      #       branches:
-      #         only: release-staging
-      # - integration-test:
-      #     requires:
-      #       - deploy-to-staging
-      #     filters:
-      #       branches:
-      #         only: release-staging
+      - testpypi-install-n-test:
+          requires:
+            - build_n_test
+          filters:
+            branches:
+              only: test-pypi
+      - integration-test:
+          requires:
+            - testpypi-install-n-test
+          filters:
+            branches:
+              only: test-pypi
