@@ -105,7 +105,7 @@ jobs:
           name: Deploy package (source distro & wheel) to 'testpypi' (index) server
           command: tox -e deploy -vv
 
- integration-test:
+  integration-test:
     executor: py38-docker-image
     steps:
       - checkout
