@@ -24,7 +24,7 @@ class SubclassRegistry(type, Generic[T]):
 
     Example:
 
-        >>> from so_magic.utils import SubclassRegistry
+        >>> from software_patterns import SubclassRegistry
 
         >>> class ParentClass(metaclass=SubclassRegistry):
         ...  pass
