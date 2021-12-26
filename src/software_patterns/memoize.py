@@ -1,4 +1,9 @@
-"""Implementation of the object pool"""
+"""Implementation of the Memoize Software Design Pattern.
+
+Memoize is implemented using an Object Pool which is queried by a key which is
+the result of computing a hash given runtime arguments.
+
+"""
 from typing import Dict, Generic, TypeVar, Any, Callable, Optional, Union
 import types
 
@@ -20,26 +25,50 @@ def adapt_build_hash(a_callable: RuntimeBuildHashCallable):
 
 
 class ObjectsPool(Generic[ObjectType]):
-    """Class of objects that are able to return a reference to an object upon request.
+    """Cache objects and allow to query (the pool) using runtime arguments.
+    
+    Instances of the ObjectsPool class implement the Object Pool Software Design
+    Creational Pattern.
 
-    Whenever an object is requested, it is checked whether it exists in the pool.
-    Then if it exists, a reference is returned, otherwise a new object is
-    constructed (given the provided callable) and its reference is returned.
+    Whenever an object is requested, it is checked whether it exists in the
+    pool by using the runtimetime arguments to query a python dictionary.
+    If it exists, a reference is returned, otherwise a new object is
+    constructed (given the provided callback) and its reference is returned.
 
-    Arguments:
-        constructor (callable): able to construct the object given arguments
-        objects (dict): the data structure representing the object pool
+    Example:
+        >>> from software_patterns import ObjectsPool
+        >>> class ClientClass:
+        ...  def __init__(self, a: int, b: int):
+        ...   pass
+
+        >>> object_pool = ObjectsPool[ClientClass](ClientClass)
+
+        >>> obj1 = object_pool.get_object(1, 2)
+        >>> obj2 = object_pool.get_object(1, 3)
+        >>> obj3 = object_pool.get_object(1, 2)
+
+        >>> id(obj1) == id(obj3)
+        True
+
+        >>> len(object_pool._objects)
+        2
+
+    Args:
+        callback (Callable[..., ObjectType]): constructs objects given arguments
+        hash_callback (Optional[RuntimeBuildHashCallable], optional): [description]. option to overide the default hash key computer. Defaults to None.
+    Returns:
+        [type]: [description]
     """
     _objects: Dict[DictKey, ObjectType]
 
-    user_supplied_callaback: Dict[bool, Callable] = {
+    user_supplied_callback: Dict[bool, Callable] = {
         True: lambda callback: callback,
         False: lambda callback: ObjectsPool.__build_hash,
     }
 
     def __init__(self, callback: Callable[..., ObjectType], hash_callback: Optional[RuntimeBuildHashCallable]=None):
         self.constructor = callback
-        build_hash_callback = self.user_supplied_callaback[callable(hash_callback)](hash_callback)
+        build_hash_callback = self.user_supplied_callback[callable(hash_callback)](hash_callback)
         self._build_hash = types.MethodType(adapt_build_hash(build_hash_callback), self)
         self._objects = {}
 
@@ -51,12 +80,12 @@ class ObjectsPool(Generic[ObjectType]):
     def get_object(self, *args: Any, **kwargs: Any) -> ObjectType:
         r"""Request an object from the pool.
 
-        Get or create an object given the input parameters. Existence in the pool is done using the
-        python-build-in hash function. The input \*args and \*\*kwargs serve as
-        input in the hash function to create unique keys with which to "query" the object pool.
+        Get or create an object given the input arguments, which are used to 
+        create a unique hash key. The key is used to query a python dictionary
+        and determine whether the object request refers to a cached object.
 
         Returns:
-            object: the reference to the object that corresponds to the input
+            object (ObjectType): the reference to the object that corresponds to the input
             arguments, regardless of whether it was found in the pool or not
         """
         key = self._build_hash(*args, **kwargs)

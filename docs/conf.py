@@ -31,7 +31,7 @@ release = '0.9.0'
 # ones.
 extensions = [
     'sphinx.ext.doctest',
-    'sphinx.ext.autodoc',
+    'sphinx.ext.autodoc',  # provides the automodule directive
     'sphinx.ext.autosummary',
     'sphinx.ext.coverage',
     'sphinx.ext.doctest',

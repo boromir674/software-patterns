@@ -1,8 +1,13 @@
 software\_patterns package
 ==========================
 
-Submodules
+Components
 ----------
+
+- Memoize
+- Notification
+- Proxy
+- Subclass Registry
 
 software\_patterns.memoize module
 ---------------------------------
@@ -37,8 +42,8 @@ software\_patterns.subclass\_registry module
    :show-inheritance:
 
 
-Module contents
----------------
+Module contents A
+----------------- 
 
 .. automodule:: software_patterns
    :members:

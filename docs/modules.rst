@@ -1,5 +1,5 @@
-software_patterns
-=================
+Software Patterns API reference
+===============================
 
 .. toctree::
    :maxdepth: 4
