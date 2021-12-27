@@ -4,3 +4,6 @@ languages:
   production:
     include:
       - src/software_patterns/*.py
+  test:
+    include:
+      - tests/*.py
