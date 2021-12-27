@@ -4,6 +4,8 @@ languages:
   production:
     include:
       - src/software_patterns/*.py
+    exclude:
+      - docs/conf.py
   test:
     include:
       - tests/*.py
