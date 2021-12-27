@@ -1,6 +1,6 @@
 exclude:
 - /docs/.*
-component_depth: 4
+component_depth: 3
 languages:
 - name: python
   production:
