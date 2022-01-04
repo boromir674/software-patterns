@@ -4,10 +4,12 @@ import pytest
 @pytest.fixture
 def subclass_registry_module():
     from software_patterns import SubclassRegistry
-    from software_patterns.subclass_registry import InstantiationError
+    from software_patterns.subclass_registry import InstantiationError, \
+        UnknownClassError
     return type('M', (), {
         'SubclassRegistry': SubclassRegistry,
         'InstantiationError': InstantiationError,
+        'UnknownClassError': UnknownClassError,
     })
 
 
@@ -64,7 +66,7 @@ def test_metaclass_usage(subclass_registry_module):
     assert ParentClass.subclasses == {}
 
 
-def test_subclass_registry(use_metaclass):
+def test_subclass_registry(use_metaclass, subclass_registry_module):
     child1_instance1, Child1, ParentClass = use_metaclass('child1', inherit=True)
 
     non_existent_identifier = 'child2'
@@ -74,7 +76,7 @@ def test_subclass_registry(use_metaclass):
         f'{non_existent_identifier}, but known identifiers are ' \
         rf'\[{", ".join(subclass_identifier for subclass_identifier in ParentClass.subclasses.keys())}\]'
 
-    with pytest.raises(ValueError, match=exception_message_regex):
+    with pytest.raises(subclass_registry_module.UnknownClassError, match=exception_message_regex):
         ParentClass.create(non_existent_identifier)
 
     child1_instance2, Child2, ParentClass2 = use_metaclass('child2', inherit=False)

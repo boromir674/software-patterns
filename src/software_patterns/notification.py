@@ -87,6 +87,39 @@ class Subject(SubjectInterface, Generic[StateType]):
 
     The subscription management methods provided are 'attach', 'detach' (as in
     the SubjectInterface) and 'add', which attached multiple observers at once.
+
+    Example:
+
+        >>> from software_patterns import Subject, Observer
+
+        >>> broadcaster = Subject()
+
+        >>> class ObserverTypeA(Observer):
+        ...  def update(self, *args, **kwargs):
+        ...   event = args[0].state
+        ...   print(f'observer-type-a reacts to event {event}')
+
+        >>> class ObserverTypeB(Observer):
+        ...  def update(self, *args, **kwargs):
+        ...   event = args[0].state
+        ...   print(f'observer-type-b reacts to event {event}')
+
+        >>> subscriber_1 = ObserverTypeA()
+        >>> subscriber_2 = ObserverTypeB()
+
+        >>> broadcaster.add(subscriber_2, subscriber_1)
+
+        >>> broadcaster.state = 'event-object-A'
+
+        >>> broadcaster.notify()
+        observer-type-b reacts to event event-object-A
+        observer-type-a reacts to event event-object-A
+
+        >>> broadcaster.detach(subscriber_2)
+
+        >>> broadcaster.state = 'event-object-B'
+        >>> broadcaster.notify()
+        observer-type-a reacts to event event-object-B
     """
     def __init__(self, *args, **kwargs):
         self._observers: List[ObserverInterface] = []

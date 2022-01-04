@@ -1,5 +1,6 @@
 """Exposes the SubclassRegistry that allows to define a single registration point of one or more subclasses of a
-(common parent) class."""
+(common parent) class.
+"""
 
 from typing import TypeVar, Generic, Dict
 
@@ -7,7 +8,6 @@ T = TypeVar('T')
 
 
 class SubclassRegistry(type, Generic[T]):
-    subclasses: Dict[str, type]
     """Subclass Registry
 
     A (parent) class using this class as metaclass gains the 'subclasses' class attribute as well as the 'create' and
@@ -26,18 +26,18 @@ class SubclassRegistry(type, Generic[T]):
 
         >>> from software_patterns import SubclassRegistry
 
-        >>> class ParentClass(metaclass=SubclassRegistry):
+        >>> class ClassRegistry(metaclass=SubclassRegistry):
         ...  pass
 
-        >>> ParentClass.subclasses
+        >>> ClassRegistry.subclasses
         {}
 
-        >>> @ParentClass.register_as_subclass('child')
-        ... class ChildClass(ParentClass):
+        >>> @ClassRegistry.register_as_subclass('child')
+        ... class ChildClass:
         ...  def __init__(self, child_attribute):
         ...   self.attr = child_attribute
 
-        >>> child_instance = ParentClass.create('child', 'attribute-value')
+        >>> child_instance = ClassRegistry.create('child', 'attribute-value')
         >>> child_instance.attr
         'attribute-value'
 
@@ -47,12 +47,11 @@ class SubclassRegistry(type, Generic[T]):
         >>> isinstance(child_instance, ChildClass)
         True
 
-        >>> isinstance(child_instance, ParentClass)
-        True
-
-        >>> {k: v.__name__ for k, v in ParentClass.subclasses.items()}
+        >>> {k: v.__name__ for k, v in ClassRegistry.subclasses.items()}
         {'child': 'ChildClass'}
     """
+    subclasses: Dict[str, type]
+
     def __init__(cls, *args):
         super().__init__(*args)
         cls.subclasses = {}
@@ -67,14 +66,14 @@ class SubclassRegistry(type, Generic[T]):
             subclass_identifier (str): the unique identifier under which to look for the corresponding subclass
 
         Raises:
-            ValueError: In case the given identifier is unknown to the parent class
+            UnknownClassError: In case the given identifier is unknown to the parent class
             InstantiationError: In case the runtime args and kwargs do not match the constructor signature
 
         Returns:
             object: the instance of the registered subclass
         """
         if subclass_identifier not in cls.subclasses:
-            raise ValueError(f'Bad "{str(cls.__name__)}" subclass request; requested subclass with identifier '
+            raise UnknownClassError(f'Bad "{str(cls.__name__)}" subclass request; requested subclass with identifier '
                              f'{str(subclass_identifier)}, but known identifiers are '
                              f'[{", ".join(str(subclass_id) for subclass_id in cls.subclasses.keys())}]')
         try:
@@ -109,3 +108,4 @@ class SubclassRegistry(type, Generic[T]):
 
 
 class InstantiationError(Exception): pass
+class UnknownClassError(Exception): pass

@@ -26,7 +26,7 @@ def adapt_build_hash(a_callable: RuntimeBuildHashCallable):
 
 class ObjectsPool(Generic[ObjectType]):
     """Cache objects and allow to query (the pool) using runtime arguments.
-    
+
     Instances of the ObjectsPool class implement the Object Pool Software Design
     Creational Pattern.
 
@@ -55,7 +55,8 @@ class ObjectsPool(Generic[ObjectType]):
 
     Args:
         callback (Callable[..., ObjectType]): constructs objects given arguments
-        hash_callback (Optional[RuntimeBuildHashCallable], optional): [description]. option to overide the default hash key computer. Defaults to None.
+        hash_callback (Optional[RuntimeBuildHashCallable], optional): option to
+            overide the default hash key computer. Defaults to None.
     Returns:
         [type]: [description]
     """
@@ -80,7 +81,7 @@ class ObjectsPool(Generic[ObjectType]):
     def get_object(self, *args: Any, **kwargs: Any) -> ObjectType:
         r"""Request an object from the pool.
 
-        Get or create an object given the input arguments, which are used to 
+        Get or create an object given the input arguments, which are used to
         create a unique hash key. The key is used to query a python dictionary
         and determine whether the object request refers to a cached object.
 
