@@ -25,6 +25,7 @@ def test_proxy_behaviour(proxy_module, dummy_handle, capsys):
             # delegate handling to the real real subject from client code
             # so frankly the request method here is also an adapter
             print(dummy_handle(self, *args, **kwargs))
+            super().request(*args, **kwargs)
             return type(self).__name__
 
     # Derive from Proxy
@@ -44,8 +45,9 @@ def test_proxy_behaviour(proxy_module, dummy_handle, capsys):
             after_args = list(['after'] + list(args))
             print(dummy_handle(self, *after_args, **kwargs))
             return _
-
-    real_subject = ClientSubject(None)
+    def _dummy_callback(*args, **kwargs):
+        return None
+    real_subject = ClientSubject(_dummy_callback)
     proxy = ClientProxy(real_subject)
 
     # use proxy in a scenario
