@@ -44,6 +44,7 @@ Install from the Pypi server:
 
     pip install software_patterns
 
+.. inclusion-marker-do-not-remove
 
 
 .. |circleci|  image:: https://img.shields.io/circleci/build/github/boromir674/software-patterns/master?logo=circleci

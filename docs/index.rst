@@ -1,6 +1,12 @@
 .. image:: static/software-patterns-logo.png
    :width: 600
 
+|
+
+|circleci| |codecov| |better_code_hub| |codacy| |code_climate| |maintainability| |scrutinizer|
+|pypi| |py_versions| |wheel| |commits_since|
+
+      
 .. Welcome to Software Patterns documentation!
 .. ===========================================
 
@@ -18,6 +24,9 @@ formalized in terms of how they are used, what problem they solve and why they a
 These code designs, which are frequently found in various code bases, are known as Software Design Patterns.
 
 
+.. include:: ../README.rst
+  :start-after: inclusion-marker-do-not-remove
+
 
 .. toctree::
    :maxdepth: 1
@@ -25,6 +34,7 @@ These code designs, which are frequently found in various code bases, are known 
 
    introduction
    software-design-patterns
+   development
    finalle
    modules
 

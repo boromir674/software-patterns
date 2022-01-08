@@ -1,6 +1,10 @@
 Introduction
 ############
 
+In these documentation pages we present the `software_patterns` Python package and the motivation
+for publishing it. The package currently host only a handful of software patterns, but they come with
+a test suite and full CI for local and remote integrations.
+
 
 Why would this project be useful to you?
 ========================================
@@ -24,7 +28,7 @@ To use the python package and its contained software patterns in your project:
 Why use this Python Patterns library?
 =====================================
 
-| It is user-frriendly with a clean API designed to reduce boilerplate code needed to use a pattern in your client code.
+| It is user-friendly with a clean API designed to reduce boilerplate code needed to use a pattern in your client code.
 | It comes with a 100% code coverage test suite (automated tests).
 | It is statically type checked with mypy.
 | It features (these) documentation pages with examples on how to use the package, doctests (see [here]) and
