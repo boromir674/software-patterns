@@ -25,17 +25,18 @@ def test_proxy_behaviour(proxy_module, dummy_handle, capsys):
             # delegate handling to the real real subject from client code
             # so frankly the request method here is also an adapter
             print(dummy_handle(self, *args, **kwargs))
+            super().request(*args, **kwargs)
             return type(self).__name__
 
     # Derive from Proxy
     class ClientProxy(prm.Proxy):
-        
+
         def request(self, *args, **kwargs):
-            
+
             # run proxy code before sending request to the "proxied" handler
             before_args = list(['before'] + list(args))
             print(dummy_handle(self, *before_args, **kwargs))
-            
+
             # handle request with the proxied logic
             _ = super().request(*args, **kwargs)
             assert _ == 'ClientSubject'
@@ -44,8 +45,9 @@ def test_proxy_behaviour(proxy_module, dummy_handle, capsys):
             after_args = list(['after'] + list(args))
             print(dummy_handle(self, *after_args, **kwargs))
             return _
-
-    real_subject = ClientSubject()
+    def _dummy_callback(*args, **kwargs):
+        return None
+    real_subject = ClientSubject(_dummy_callback)
     proxy = ClientProxy(real_subject)
 
     # use proxy in a scenario

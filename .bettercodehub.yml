@@ -1,3 +1,13 @@
+exclude:
+- /docs/.*
 component_depth: 3
 languages:
-- python
+- name: python
+  production:
+    include:
+      - src/software_patterns/*.py
+    exclude:
+      - docs/conf.py
+  test:
+    include:
+      - tests/*.py

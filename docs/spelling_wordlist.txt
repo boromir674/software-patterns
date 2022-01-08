@@ -1,0 +1,25 @@
+virtualenv
+macOS
+
+Quickstart
+Submodules
+Subpackages
+
+# python modules/object names
+utils
+memoize
+metaclass
+datapoints
+args
+kwargs
+Iterable
+mutator
+
+# Software Engineering
+instantiation
+subclasses
+runtime
+
+eg
+ie
+iterable
