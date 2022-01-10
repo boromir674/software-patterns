@@ -80,7 +80,7 @@ Install from the Pypi server:
     :alt: PyPI - Python Version
     :target: https://pypi.org/project/software-patterns
 
-.. |commits_since| image:: https://img.shields.io/github/commits-since/boromir674/software-patterns/v0.9.0/master?color=blue&logo=Github
+.. |commits_since| image:: https://img.shields.io/github/commits-since/boromir674/software-patterns/v1.0.0/master?color=blue&logo=Github
     :alt: GitHub commits since tagged version (branch)
     :target: https://github.com/boromir674/software-patterns/compare/v1.0.0..master
 
