@@ -22,7 +22,7 @@ copyright = '2021, Konstantinos Lampridis'
 author = 'Konstantinos Lampridis'
 
 # The full version, including alpha/beta/rc tags
-release = '0.9.0'
+release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
 
@@ -73,13 +73,13 @@ if not on_rtd:  # only set the theme if we're building docs locally
 # provided by the sphinx.ext.extlinks extension
 
 # With the current settings (see the mapping below), you can for example use the directive :issue:`50`, which will
-# render a link with text 'issue 50' which upon clicking redirects to https://github.com/peterwittek/somoclu/issues/50
+# render a link with text 'issue 5' which upon clicking redirects to https://github.com/boromir674/software-patterns/issues/5
 
 # Mapping of link identifiers/keys to:
 # 2-length tuples with 1st item the url and 2nd the prefix (the "text string")
 # extlinks = {
 #     'issue': (
-#         'https://github.com/peterwittek/somoclu/issues/%s',
+#         'https://github.com/boromir674/software-patterns/issues/%s',
 #         'issue '
 #     ),
 # }

@@ -9,14 +9,21 @@ A Python package with common Software Design Patterns.
 .. list-table::
     :stub-columns: 1
 
-    * - tests
-      - | |circleci| |codecov|
+    * - build
+      - | |circleci| |codecov| |docs|
 
     * - package
       - | |pypi| |wheel| |py_versions| |commits_since|
 
     * - code quality
       - |better_code_hub| |codacy| |code_climate| |maintainability| |scrutinizer|
+
+
+|
+| **Documentation:** https://software-patterns.readthedocs.io/en/master
+| **Source Code:** https://github.com/boromir674/software-patterns
+| **CI/CD:** https://circleci.com/gh/boromir674/software-patterns/tree/master
+|
 
 
 
@@ -55,8 +62,11 @@ Install from the Pypi server:
 .. |codecov| image:: https://codecov.io/gh/boromir674/software-patterns/branch/master/graph/badge.svg?token=3POTVNU0L4
     :alt: Codecov
     :target: https://app.codecov.io/gh/boromir674/software-patterns/branch/master
-    
 
+
+.. |docs| image:: https://img.shields.io/readthedocs/software-patterns/latest?logo=readthedocs
+    :target: https://software-patterns.readthedocs.io/en/latest/?badge=latest
+    :alt: Read the Docs (version)
 
 .. |pypi| image:: https://img.shields.io/pypi/v/software-patterns?color=blue&label=pypi&logo=pypi&logoColor=%23849ed9
     :alt: PyPI
@@ -72,7 +82,7 @@ Install from the Pypi server:
 
 .. |commits_since| image:: https://img.shields.io/github/commits-since/boromir674/software-patterns/v0.9.0/master?color=blue&logo=Github
     :alt: GitHub commits since tagged version (branch)
-    :target: https://github.com/boromir674/software-patterns/compare/v0.9.0..master
+    :target: https://github.com/boromir674/software-patterns/compare/v1.0.0..master
 
 
 
@@ -95,13 +105,3 @@ Install from the Pypi server:
 .. |scrutinizer| image:: https://img.shields.io/scrutinizer/quality/g/boromir674/software-patterns/master?logo=scrutinizer-ci
     :alt: Scrutinizer code quality
     :target: https://scrutinizer-ci.com/g/boromir674/software-patterns/?branch=master
-
-
-
-.. |version| image:: https://img.shields.io/pypi/v/topic-modeling-toolkit.svg
-    :alt: PyPI Package latest release
-    :target: https://pypi.org/project/topic-modeling-toolkit
-
-.. |python_versions| image:: https://img.shields.io/pypi/pyversions/software-patterns.svg
-    :alt: Supported versions
-    :target: https://pypi.org/project/software-patterns/
