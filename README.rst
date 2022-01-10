@@ -19,6 +19,13 @@ A Python package with common Software Design Patterns.
       - |better_code_hub| |codacy| |code_climate| |maintainability| |scrutinizer|
 
 
+|
+| **Documentation:** https://software-patterns.readthedocs.io/en/master
+| **Source Code:** https://github.com/boromir674/software-patterns
+| **CI/CD:** https://circleci.com/gh/boromir674/software-patterns/tree/master
+|
+
+
 
 Overview
 ========
