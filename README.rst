@@ -16,13 +16,13 @@ A Python package with common Software Design Patterns.
       - | |pypi| |wheel| |py_versions| |commits_since|
 
     * - code quality
-      - |better_code_hub| |codacy| |code_climate| |maintainability| |scrutinizer|
+      - |better_code_hub| |scrutinizer|
 
 
 |
-| **Documentation:** https://software-patterns.readthedocs.io/en/master
-| **Source Code:** https://github.com/boromir674/software-patterns
-| **CI/CD:** https://circleci.com/gh/boromir674/software-patterns/tree/master
+| **Documentation:** https://software-patterns.readthedocs.io/en/dev
+| **Source Code:** https://github.com/boromir674/software-patterns/tree/dev
+| **CI/CD:** https://circleci.com/gh/boromir674/software-patterns/tree/dev
 |
 
 
@@ -54,18 +54,18 @@ Install from the Pypi server:
 .. inclusion-marker-do-not-remove
 
 
-.. |circleci|  image:: https://img.shields.io/circleci/build/github/boromir674/software-patterns/master?logo=circleci
+.. |circleci|  image:: https://img.shields.io/circleci/build/github/boromir674/software-patterns/dev?logo=circleci
     :alt: CircleCI
-    :target: https://circleci.com/gh/boromir674/software-patterns/tree/master
+    :target: https://circleci.com/gh/boromir674/software-patterns/tree/dev
 
 
-.. |codecov| image:: https://codecov.io/gh/boromir674/software-patterns/branch/master/graph/badge.svg?token=3POTVNU0L4
+.. |codecov| image:: https://codecov.io/gh/boromir674/software-patterns/branch/dev/graph/badge.svg?token=3POTVNU0L4
     :alt: Codecov
-    :target: https://app.codecov.io/gh/boromir674/software-patterns/branch/master
+    :target: https://app.codecov.io/gh/boromir674/software-patterns/branch/dev
 
 
-.. |docs| image:: https://img.shields.io/readthedocs/software-patterns/latest?logo=readthedocs
-    :target: https://software-patterns.readthedocs.io/en/latest/?badge=latest
+.. |docs| image:: https://img.shields.io/readthedocs/software-patterns/dev?logo=readthedocs
+    :target: https://software-patterns.readthedocs.io/en/dev/?badge=dev
     :alt: Read the Docs (version)
 
 .. |pypi| image:: https://img.shields.io/pypi/v/software-patterns?color=blue&label=pypi&logo=pypi&logoColor=%23849ed9
@@ -80,28 +80,16 @@ Install from the Pypi server:
     :alt: PyPI - Python Version
     :target: https://pypi.org/project/software-patterns
 
-.. |commits_since| image:: https://img.shields.io/github/commits-since/boromir674/software-patterns/v1.0.0/master?color=blue&logo=Github
+.. |commits_since| image:: https://img.shields.io/github/commits-since/boromir674/software-patterns/v1.0.0/dev?color=blue&logo=Github
     :alt: GitHub commits since tagged version (branch)
-    :target: https://github.com/boromir674/software-patterns/compare/v1.0.0..master
+    :target: https://github.com/boromir674/software-patterns/compare/v1.0.0..dev
 
 
 
-.. |better_code_hub| image:: https://bettercodehub.com/edge/badge/boromir674/software-patterns?branch=master
+.. |better_code_hub| image:: https://bettercodehub.com/edge/badge/boromir674/software-patterns?branch=dev
     :alt: Better Code Hub
     :target: https://bettercodehub.com/
 
-.. |codacy| image:: https://app.codacy.com/project/badge/Grade/07b27ac547a94708aefc5e845d2b6d01
-    :alt: Codacy
-    :target: https://www.codacy.com/gh/boromir674/software-patterns/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=boromir674/software-patterns&amp;utm_campaign=Badge_Grade
-
-.. |code_climate| image:: https://api.codeclimate.com/v1/badges/2ea98633f88b75e87d1a/maintainability
-   :alt: Maintainability
-   :target: https://codeclimate.com/github/boromir674/software-patterns/maintainability
-
-.. |maintainability| image:: https://img.shields.io/codeclimate/tech-debt/boromir674/software-patterns?logo=CodeClimate
-    :alt: Technical Debt
-    :target: https://codeclimate.com/github/boromir674/software-patterns/maintainability
-
-.. |scrutinizer| image:: https://img.shields.io/scrutinizer/quality/g/boromir674/software-patterns/master?logo=scrutinizer-ci
+.. |scrutinizer| image:: https://img.shields.io/scrutinizer/quality/g/boromir674/software-patterns/dev?logo=scrutinizer-ci
     :alt: Scrutinizer code quality
-    :target: https://scrutinizer-ci.com/g/boromir674/software-patterns/?branch=master
+    :target: https://scrutinizer-ci.com/g/boromir674/software-patterns/?branch=dev
