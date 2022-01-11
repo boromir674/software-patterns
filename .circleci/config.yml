@@ -194,7 +194,7 @@ workflows:
               only:
                 - master
                 - dev
-                # - test-pypi
+                - test-pypi
 
       - build-test-report:
           filters:
