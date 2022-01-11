@@ -225,35 +225,18 @@ workflows:
                 - "3.7.12"
                 - "3.9.9"
                 - "3.10"
-          filters:
-            tags:
-              only: /.*/  # runs for all branches and all tags
-      #         only:
-      #           - master
-      #           - dev
-      #           - test-pypi
+          # filters:
+          #   tags:
+          #     only: /.*/  # runs for all branches and all tags
+              only:
+                - master
+                - dev
+                # - test-pypi
 
       - build-test-report:
           filters:
             tags:
               only: /.*/  # runs for all branches and all tags
-      # - build-n-test:
-      #     name: python3.9
-      #     python_version: 3.9.9
-      #     filters:
-      #       tags:
-      #         only: /.*/  # runs for all branches and all tags
-      # - build_n_test:
-      #     filters:
-      #       tags:
-      #         only: /.*/  # runs for all branches and all tags
-      # - test-python36:
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
-      #           - dev
-      #           - test-pypi
 
       - send-coverage-to-codacy:
           requires:
@@ -268,12 +251,13 @@ workflows:
             tags:
               only: /.*/
 
-      # - visualize_code:
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
-      #           - visualize-code
+      - visualize_code:
+          filters:
+            branches:
+              only:
+                - master
+                - dev
+                - visualize-code
 
       # - build-documentation:
       #     filters:
@@ -282,16 +266,16 @@ workflows:
       #           - master
       #           - dev
       #           - release-staging
-      # - deploy-to-test-pypi:
-      #     requires:
-      #       - build_n_test
-      #       - test-python36
-      #     filters:
-      #       branches:
-      #         only: test-pypi
-      # - integration-test:
-      #     requires:
-      #       - deploy-to-test-pypi
-      #     filters:
-      #       branches:
-      #         only: test-pypi
+
+      - deploy-to-test-pypi:
+          requires:
+            - build-test-report
+          filters:
+            branches:
+              only: test-pypi
+      - integration-test:
+          requires:
+            - deploy-to-test-pypi
+          filters:
+            branches:
+              only: test-pypi
