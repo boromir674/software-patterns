@@ -9,6 +9,7 @@ executors:
         type: string
     docker:
       - image: cimg/python:<<parameters.version>>
+
   py36-docker-image:
     docker:
       - image: circleci/python:3.6.15
@@ -222,14 +223,14 @@ workflows:
       #           - 3.8.15
       #           - 3.9.7
       - build-n-test:
-          name: python3.8
-          python_version: 3.8.15
+          name: python3.7
+          python_version: 3.7.12
           filters:
             tags:
               only: /.*/  # runs for all branches and all tags
       - build-n-test:
           name: python3.9
-          python_version: 3.9.7
+          python_version: 3.9.9
           filters:
             tags:
               only: /.*/  # runs for all branches and all tags
