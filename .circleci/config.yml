@@ -1,6 +1,7 @@
 version: 2.1
 
 executors:
+
   python-docker: # declares a reusable executor
     parameters:
       version:
@@ -10,18 +11,21 @@ executors:
     docker:
       - image: cimg/python:<<parameters.version>>
 
-  py36-docker-image:
-    docker:
-      - image: circleci/python:3.6.15
-  py38-docker-image:
-    docker:
-      - image: circleci/python:3.8.9
   java15-docker-image:
     docker:
       - image: cimg/openjdk:15.0.1
+
   ubuntu-1604-vm:
     machine:
       image: ubuntu-1604:201903-01
+
+
+commands:
+
+  install-tox:
+    description: "Install tox automation tool with pip"
+    steps:
+      - run: pip install tox
 
 jobs:
   build-test-report:
@@ -32,9 +36,7 @@ jobs:
       - run:
           name: Equip machine with latest pip & wheel
           command: pip install -U pip wheel
-      - run:
-          name: Equip machine with tox automation tool
-          command: pip install --user tox
+      - install-tox
       - run:
           name: Run unittests & measure code coverage
           command: tox -e build-n-test -vv
@@ -80,15 +82,13 @@ jobs:
       - run:
           name: Equip machine with latest pip & wheel
           command: pip install -U pip wheel
-      - run:
-          name: Equip machine with tox automation tool
-          command: pip install --user tox
+      - install-tox
       - run:
           name: Run unittests & measure code coverage
           command: tox -e build-n-test -vv
 
   build_n_test:
-    executor: py38-docker-image
+    executor: python-docker
     steps:
       - run: pwd
       - checkout
@@ -96,9 +96,7 @@ jobs:
       - run:
           name: Equip machine with latest pip & wheel
           command: python -m pip install -U pip wheel
-      - run:
-          name: Equip machine with tox automation tool
-          command: python -m pip install --user tox
+      - install-tox
       - run:
           name: Run unittests & measure code coverage
           command: |
@@ -164,12 +162,10 @@ jobs:
           command: ./.codecov
 
   deploy-to-test-pypi:
-    executor: py38-docker-image
+    executor: python-docker
     steps:
       - checkout
-      - run:
-          name: Install the 'tox' automation tool
-          command: python -m pip install --user tox
+      - install-tox
       - run:
           name: Check code to comply with best practices of Python packaging ecosystem (pypi, pip, etc)
           command: tox -e check -vv
@@ -181,7 +177,7 @@ jobs:
           command: tox -e deploy -vv
 
   integration-test:
-    executor: py38-docker-image
+    executor: python-docker
     steps:
       - checkout
       - run:
@@ -195,7 +191,7 @@ jobs:
           command: pytest tests -v
 
   visualize_code:
-    executor: py38-docker-image
+    executor: python-docker
     steps:
       - checkout
       - run: sudo apt-get update -y --allow-releaseinfo-change
@@ -203,9 +199,7 @@ jobs:
       - run:
           name: Install the dot binary included in the graphviz package/distribution
           command: sudo apt-get install graphviz
-      - run:
-          name: Install tox automation tool
-          command: python -m pip install --user tox
+      - install-tox
       - run:
           name: Visualize dependency graphs as .svg files
           command: tox -e graphs -vv
