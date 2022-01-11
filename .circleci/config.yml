@@ -220,12 +220,19 @@ workflows:
           matrix:
             parameters:
               python_version:
+                - "3.6.15"
                 - "3.7.12"
+                - "3.8.12"
                 - "3.9.9"
                 - "3.10"
           filters:
             tags:
               only: /.*/  # runs for all branches and all tags
+      #         only:
+      #           - master
+      #           - dev
+      #           - test-pypi
+
       # - build-n-test:
       #     name: python3.7
       #     python_version: 3.7.12
