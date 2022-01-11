@@ -1,6 +1,9 @@
 version: 2.1
 
 executors:
+  py36-docker-image:
+    docker:
+      - image: circleci/python:3.6.15
   py38-docker-image:
     docker:
       - image: circleci/python:3.8.9
@@ -12,6 +15,39 @@ executors:
       image: ubuntu-1604:201903-01
 
 jobs:
+  test-python36:
+    executor: py36-docker-image
+    steps:
+      - checkout
+      - run: python --version
+      - run:
+          name: Equip machine with latest pip & wheel
+          command: pip install -U pip wheel
+      - run:
+          name: Equip machine with tox automation tool
+          command: pip install --user tox
+      - run:
+          name: Run unittests & measure code coverage
+          command: tox -e py36 -vv
+      - store_test_results:  # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
+          path: test-results
+      - store_artifacts:
+          path: test-results
+      # currently the 'test-results' path (define above) must match the TEST_RESULTS_DIR env variable found in circleci web site
+      - store_artifacts:
+          path: .coverage
+      - run:
+          name: Manually install the python py package
+          command: pip install py
+      - run:
+          name: Transform test results into 2 formats; html & xml
+          command: tox -e format-report -vv
+      - store_artifacts:
+          path: coverage.xml
+      - store_artifacts:
+          path: htmlcov
+          destination: htmlcov
+
   build_n_test:
     executor: py38-docker-image
     steps:
@@ -153,6 +189,10 @@ workflows:
           filters:
             tags:
               only: /.*/  # runs for all branches and all tags
+      - test-python36:
+          filters:
+            tags:
+              only: /.*/  # runs for all branches and all tags
 
       - send-coverage-to-codacy:
           requires:
@@ -163,6 +203,7 @@ workflows:
       - send-coverage-to-codecov:
           requires:
             - build_n_test
+            - test-python36
           filters:
             tags:
               only: /.*/
@@ -184,6 +225,7 @@ workflows:
       - deploy-to-test-pypi:
           requires:
             - build_n_test
+            - test-python36
           filters:
             branches:
               only: test-pypi
