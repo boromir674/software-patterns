@@ -5,7 +5,7 @@ executors:
     parameters:
       version:
         description: "version tag"
-        default: "3.8.15"
+        default: "3.8.12"
         type: string
     docker:
       - image: cimg/python:<<parameters.version>>
@@ -24,8 +24,8 @@ executors:
       image: ubuntu-1604:201903-01
 
 jobs:
-  test-python36:
-    executor: py36-docker-image
+  build-test-report:
+    executor: python-docker
     steps:
       - checkout
       - run: python --version
@@ -37,7 +37,7 @@ jobs:
           command: pip install --user tox
       - run:
           name: Run unittests & measure code coverage
-          command: tox -e py36 -vv
+          command: tox -e build-n-test -vv
       - store_test_results:  # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: test-results
       - store_artifacts:
@@ -56,13 +56,20 @@ jobs:
       - store_artifacts:
           path: htmlcov
           destination: htmlcov
+      - persist_to_workspace:
+          root: .
+          paths:
+            - coverage.xml
+            - .coverage
+            - tox.ini
+            - .git
 
   build-n-test:
     description: A job that runs the test suite against a python interpreter version
     parameters:
       python_version:
         description: "The python interpreter version we wish to test"
-        default: "3.8.15"
+        default: "3.8.12"
         type: string
     executor:
       name: python-docker
@@ -222,7 +229,6 @@ workflows:
               python_version:
                 - "3.6.15"
                 - "3.7.12"
-                - "3.8.12"
                 - "3.9.9"
                 - "3.10"
           filters:
@@ -233,12 +239,10 @@ workflows:
       #           - dev
       #           - test-pypi
 
-      # - build-n-test:
-      #     name: python3.7
-      #     python_version: 3.7.12
-      #     filters:
-      #       tags:
-      #         only: /.*/  # runs for all branches and all tags
+      - build-test-report:
+          filters:
+            tags:
+              only: /.*/  # runs for all branches and all tags
       # - build-n-test:
       #     name: python3.9
       #     python_version: 3.9.9
@@ -257,19 +261,18 @@ workflows:
       #           - dev
       #           - test-pypi
 
-      # - send-coverage-to-codacy:
-      #     requires:
-      #       - build_n_test
-      #     filters:
-      #       tags:
-      #         only: /.*/
-      # - send-coverage-to-codecov:
-      #     requires:
-      #       - build_n_test
-      #       - test-python36
-      #     filters:
-      #       tags:
-      #         only: /.*/
+      - send-coverage-to-codacy:
+          requires:
+            - build-test-report
+          filters:
+            tags:
+              only: /.*/
+      - send-coverage-to-codecov:
+          requires:
+            - build-test-report
+          filters:
+            tags:
+              only: /.*/
 
       # - visualize_code:
       #     filters:
