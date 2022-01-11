@@ -26,6 +26,7 @@ commands:
     description: "Install tox automation tool with pip"
     steps:
       - run: pip install tox
+
   run-test-suite:
     description: "Run the test suite against the code"
     steps:
@@ -85,6 +86,19 @@ jobs:
       - run: python --version
       - run-test-suite
 
+  build-documentation:
+    description: Builds the documentation pages which can be hosted in an http web server.
+    executor: python-docker
+    steps:
+      - checkout
+      - install-tox
+      - run:
+          name: Install the 'Enchant' C library, which is a dependency of the spell check process
+          command: sudo apt-get update && sudo apt-get install python-enchant
+      - run:
+          name: Build the documentation pages out of the *.rst documentation files
+          command: tox -e docs -vv
+
   send-coverage-to-codacy:
     executor: java15-docker-image
     steps:
@@ -105,14 +119,11 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Download script that can upload to codecov.io
-          command: curl -s https://codecov.io/bash > .codecov
-      - run:
-          name: Grant execution permissions to the script
-          command: chmod +x .codecov
-      - run:
-          name: Upload the code coverage measurements to codecov.io, resulted from running the test suite (unit tests)
-          command: ./.codecov
+          name: Upload the code coverage measurements, resulted from running the test suite (unit tests), to codecov.io
+          command: |
+            curl -s https://codecov.io/bash > .codecov
+            chmod +x .codecov
+            ./.codecov
 
   deploy-to-test-pypi:
     executor: python-docker
@@ -132,7 +143,6 @@ jobs:
   integration-test:
     executor: python-docker
     steps:
-      - checkout
       - run:
           name: Install the package from test.pypi.org
           command: pip install --no-deps --index-url https://test.pypi.org/simple/ software-patterns
@@ -166,6 +176,7 @@ jobs:
           path: uml-diagrams
           destination: uml-diagrams
 
+
 workflows:
   version: 2
   build_accept:
@@ -178,15 +189,12 @@ workflows:
                 - "3.7.12"
                 - "3.9.9"
                 - "3.10"
-          # filters:
-          #   tags:
-          #     only: /.*/  # runs for all branches and all tags
           filters:
             branches:
               only:
                 - master
                 - dev
-                # - test-pypi
+                - test-pypi
 
       - build-test-report:
           filters:
@@ -214,13 +222,14 @@ workflows:
                 - dev
                 - visualize-code
 
-      # - build-documentation:
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
-      #           - dev
-      #           - release-staging
+      - build-documentation:
+          filters:
+            branches:
+              only:
+                - master
+                - dev
+                - docs
+                - test-pypi
 
       - deploy-to-test-pypi:
           requires:
@@ -228,6 +237,7 @@ workflows:
           filters:
             branches:
               only: test-pypi
+
       - integration-test:
           requires:
             - deploy-to-test-pypi
