@@ -94,7 +94,7 @@ jobs:
       - install-tox
       - run:
           name: Install the 'Enchant' C library, which is a dependency of the spell check process
-          command: sudo apt-get update && sudo apt-get install python-enchant
+          command: sudo apt-get update && sudo apt-get install enchant
       - run:
           name: Build the documentation pages out of the *.rst documentation files
           command: tox -e docs -vv
@@ -139,10 +139,16 @@ jobs:
       - run:
           name: Deploy package (source distro & wheel) to 'testpypi' (index) server
           command: tox -e deploy -vv
+      - persist_to_workspace:
+          root: .
+          paths:
+            - tests
 
   integration-test:
     executor: python-docker
     steps:
+      - attach_workspace:
+          at: .
       - run:
           name: Install the package from test.pypi.org
           command: pip install --no-deps --index-url https://test.pypi.org/simple/ software-patterns
