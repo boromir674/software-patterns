@@ -26,6 +26,16 @@ commands:
     description: "Install tox automation tool with pip"
     steps:
       - run: pip install tox
+  run-test-suite:
+    description: "Run the test suite against the code"
+    steps:
+      - run:
+          name: Equip machine with latest pip & wheel
+          command: pip install -U pip wheel
+      - install-tox
+      - run:
+          name: Run unittests & measure code coverage
+          command: tox -e clean,build-n-test -vv
 
 jobs:
   build-test-report:
@@ -33,13 +43,7 @@ jobs:
     steps:
       - checkout
       - run: python --version
-      - run:
-          name: Equip machine with latest pip & wheel
-          command: pip install -U pip wheel
-      - install-tox
-      - run:
-          name: Run unittests & measure code coverage
-          command: tox -e build-n-test -vv
+      - run-test-suite
       - store_test_results:  # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: test-results
       - store_artifacts:
@@ -79,58 +83,7 @@ jobs:
     steps:
       - checkout
       - run: python --version
-      - run:
-          name: Equip machine with latest pip & wheel
-          command: pip install -U pip wheel
-      - install-tox
-      - run:
-          name: Run unittests & measure code coverage
-          command: tox -e build-n-test -vv
-
-  build_n_test:
-    executor: python-docker
-    steps:
-      - run: pwd
-      - checkout
-      - run: python --version
-      - run:
-          name: Equip machine with latest pip & wheel
-          command: python -m pip install -U pip wheel
-      - install-tox
-      - run:
-          name: Run unittests & measure code coverage
-          command: |
-            python -m tox -e clean
-            python -m tox -e py38
-      - store_test_results:  # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
-          path: test-results
-      - store_artifacts:
-          path: test-results
-      # currently the 'test-results' path (define above) must match the TEST_RESULTS_DIR env variable found in circleci web site
-      - store_artifacts:
-          path: .coverage
-      - run:
-          name: Manually install the python py package
-          command: python -m pip install py
-      - run:
-          name: Transform test results into 2 formats; html & xml
-          command: python -m tox -e format-report -vv
-      - store_artifacts:
-          path: coverage.xml
-      - store_artifacts:
-          path: htmlcov
-          destination: htmlcov
-      # Persist the specified paths (eg .coverage and tox.ini) into the workspace for use in proceeding job.
-      - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
-          root: .
-          # Must be relative path from root
-          paths:
-            - coverage.xml
-            - .coverage
-            - tox.ini
-            - .git
+      - run-test-suite
 
   send-coverage-to-codacy:
     executor: java15-docker-image
@@ -228,6 +181,8 @@ workflows:
           # filters:
           #   tags:
           #     only: /.*/  # runs for all branches and all tags
+          filters:
+            branches:
               only:
                 - master
                 - dev
