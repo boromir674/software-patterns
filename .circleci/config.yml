@@ -191,8 +191,12 @@ workflows:
               only: /.*/  # runs for all branches and all tags
       - test-python36:
           filters:
-            tags:
-              only: /.*/  # runs for all branches and all tags
+            branches:
+              only:
+                - master
+                - dev
+            # tags:
+            #   only: /.*/  # runs for all branches and all tags
 
       - send-coverage-to-codacy:
           requires:
