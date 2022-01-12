@@ -27,8 +27,8 @@ commands:
     steps:
       - run: pip install tox
 
-  run-test-suite:
-    description: "Run the test suite against the code"
+  run-tests:
+    description: "Type check code with mypy and run the test suite against the code"
     steps:
       - run:
           name: Equip machine with latest pip & wheel
@@ -36,7 +36,7 @@ commands:
       - install-tox
       - run:
           name: Run unittests & measure code coverage
-          command: tox -e clean,build-n-test -vv
+          command: tox -e mypy,clean,build-n-test -vv
 
 jobs:
   build-test-report:
@@ -44,7 +44,7 @@ jobs:
     steps:
       - checkout
       - run: python --version
-      - run-test-suite
+      - run-tests
       - store_test_results:  # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: test-results
       - store_artifacts:
@@ -84,7 +84,7 @@ jobs:
     steps:
       - checkout
       - run: python --version
-      - run-test-suite
+      - run-tests
 
   build-documentation:
     description: Builds the documentation pages which can be hosted in an http web server.
