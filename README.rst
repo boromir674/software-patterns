@@ -26,15 +26,28 @@ A Python package with common Software Design Patterns.
 |
 
 
-
 Overview
 ========
 
-This package exposes a set of Python objects (ie Classes) that allow convient usage of common
+This repository hosts the open-source code of the Software Patterns project.
+The project's main component is the `software-patterns` python package hosted on Pypi at https://pypi.org/project/software-patterns
+It also features online Documentation hosted at https://software-patterns.readthedocs.io/ and a
+a public `CI workflow`_ hosted on CircleCI.
+
+
+What are Software Design Patterns?
+
+Software Engineers are employing various designs and solutions to solve their problems.
+The emerging (software) patterns, among the code solutions, targeting reoccuring problems have been studied and
+formalized in terms of how they are used, what problem they solve and why they are a fit candidate to solve it.
+These code designs, which are frequently found in various code bases, are known as Software Design Patterns.
+
+
+The `software-patterns` package exposes a set of Python Classes that allow convient usage of common
 Software Design Patterns.
 
 
-Key features of the package:
+Design Patterns implemented:
 
 * Notification (aka Broadcast/Listener pattern)
 * Object Pool (aka Memoize)
@@ -49,9 +62,50 @@ Install from the Pypi server:
 
 ::
 
-    pip install software_patterns
+    pip install software-patterns
 
 .. inclusion-marker-do-not-remove
+
+
+Quickstart
+----------
+
+
+Example code to use the `factory` pattern in the form of a `(sub) class registry`:
+
+.. code-block:: python
+
+    from software_patterns import SubclassRegistry
+
+    class MyClassRegistry(metaclass=SubclassRegistry):
+        pass
+
+    @MyClassRegistry.register_as_subclass('a')
+    class ClassA:
+        def __init__(self, number):
+            self.attr = number
+
+    @MyClassRegistry.register_as_subclass('b')
+    class ClassB:
+        def __init__(self, number):
+            self.attr = number - 1
+
+
+    instance_a = MyClassRegistry.create('a', 10)
+    assert type(instance_a) == ClassA
+    assert instance_a.attr == 10
+
+    assert isinstance(child_instance, ChildClass)
+
+    assert MyClassRegistry.subclasses == {'a': 'ClassA'}
+
+    instance_b = MyClassRegistry.create('b', 10)
+    assert type(instance_b) == ClassB
+    assert instance_b.attr == 9
+
+    assert isinstance(instance_b, ClassB)
+
+    assert MyClassRegistry.subclasses == {'a': 'ClassA', 'b': 'ClassB'}
 
 
 .. |circleci|  image:: https://img.shields.io/circleci/build/github/boromir674/software-patterns/dev?logo=circleci
