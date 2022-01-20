@@ -1,5 +1,5 @@
 Software Patterns
-=================
+#################
 
 A Python package with common Software Design Patterns.
 
@@ -31,7 +31,7 @@ Overview
 
 This repository hosts the open-source code of the Software Patterns project.
 The project's main component is the `software-patterns` python package hosted on Pypi at https://pypi.org/project/software-patterns
-It also features online Documentation hosted at https://software-patterns.readthedocs.io/ and a
+It also features online Documentation Pages hosted at https://software-patterns.readthedocs.io/ and
 a public `CI workflow`_ hosted on CircleCI.
 
 
@@ -90,14 +90,13 @@ Example code to use the `factory` pattern in the form of a `(sub) class registry
         def __init__(self, number):
             self.attr = number - 1
 
+    assert MyClassRegistry.subclasses == {'a': ClassA, 'b': ClassB}
 
     instance_a = MyClassRegistry.create('a', 10)
     assert type(instance_a) == ClassA
     assert instance_a.attr == 10
 
-    assert isinstance(child_instance, ChildClass)
-
-    assert MyClassRegistry.subclasses == {'a': 'ClassA'}
+    assert isinstance(instance_a, ClassA)
 
     instance_b = MyClassRegistry.create('b', 10)
     assert type(instance_b) == ClassB
@@ -105,7 +104,7 @@ Example code to use the `factory` pattern in the form of a `(sub) class registry
 
     assert isinstance(instance_b, ClassB)
 
-    assert MyClassRegistry.subclasses == {'a': 'ClassA', 'b': 'ClassB'}
+
 
 
 .. |circleci|  image:: https://img.shields.io/circleci/build/github/boromir674/software-patterns/dev?logo=circleci
