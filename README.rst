@@ -135,7 +135,7 @@ Example code to use the `factory` pattern in the form of a `(sub) class registry
 
 .. |commits_since| image:: https://img.shields.io/github/commits-since/boromir674/software-patterns/v1.1.0/dev?color=blue&logo=Github
     :alt: GitHub commits since tagged version (branch)
-    :target: https://github.com/boromir674/software-patterns/compare/v1.1.0..dev
+    :target: https://github.com/boromir674/software-patterns/compare/v1.1.0..master
 
 
 
