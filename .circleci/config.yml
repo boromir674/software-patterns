@@ -1,34 +1,50 @@
 version: 2.1
 
 executors:
-  py38-docker-image:
+
+  python-docker: # declares a reusable executor
+    parameters:
+      version:
+        description: "version tag"
+        default: "3.8.12"
+        type: string
     docker:
-      - image: circleci/python:3.8.9
+      - image: cimg/python:<<parameters.version>>
+
   java15-docker-image:
     docker:
       - image: cimg/openjdk:15.0.1
+
   ubuntu-1604-vm:
     machine:
       image: ubuntu-1604:201903-01
 
-jobs:
-  build_n_test:
-    executor: py38-docker-image
+
+commands:
+
+  install-tox:
+    description: "Install tox automation tool with pip"
     steps:
-      - run: pwd
-      - checkout
-      - run: python --version
+      - run: pip install tox
+
+  run-tests:
+    description: "Type check code with mypy and run the test suite against the code"
+    steps:
       - run:
           name: Equip machine with latest pip & wheel
-          command: python -m pip install -U pip wheel
-      - run:
-          name: Equip machine with tox automation tool
-          command: python -m pip install --user tox
+          command: pip install -U pip wheel
+      - install-tox
       - run:
           name: Run unittests & measure code coverage
-          command: |
-            python -m tox -e clean
-            python -m tox -e py38
+          command: tox -e mypy,clean,build-n-test -vv
+
+jobs:
+  build-test-report:
+    executor: python-docker
+    steps:
+      - checkout
+      - run: python --version
+      - run-tests
       - store_test_results:  # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
           path: test-results
       - store_artifacts:
@@ -38,26 +54,50 @@ jobs:
           path: .coverage
       - run:
           name: Manually install the python py package
-          command: python -m pip install py
+          command: pip install py
       - run:
           name: Transform test results into 2 formats; html & xml
-          command: python -m tox -e format-report -vv
+          command: tox -e format-report -vv
       - store_artifacts:
           path: coverage.xml
       - store_artifacts:
           path: htmlcov
           destination: htmlcov
-      # Persist the specified paths (eg .coverage and tox.ini) into the workspace for use in proceeding job.
       - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
           root: .
-          # Must be relative path from root
           paths:
             - coverage.xml
             - .coverage
             - tox.ini
             - .git
+
+  build-n-test:
+    description: A job that runs the test suite against a python interpreter version
+    parameters:
+      python_version:
+        description: "The python interpreter version we wish to test"
+        default: "3.8.12"
+        type: string
+    executor:
+      name: python-docker
+      version: <<parameters.python_version>>
+    steps:
+      - checkout
+      - run: python --version
+      - run-tests
+
+  build-documentation:
+    description: Builds the documentation pages which can be hosted in an http web server.
+    executor: python-docker
+    steps:
+      - checkout
+      - install-tox
+      - run:
+          name: Install the 'Enchant' C library, which is a dependency of the spell check process
+          command: sudo apt-get update && sudo apt-get install enchant
+      - run:
+          name: Build the documentation pages out of the *.rst documentation files
+          command: tox -e docs -vv
 
   send-coverage-to-codacy:
     executor: java15-docker-image
@@ -79,22 +119,17 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Download script that can upload to codecov.io
-          command: curl -s https://codecov.io/bash > .codecov
-      - run:
-          name: Grant execution permissions to the script
-          command: chmod +x .codecov
-      - run:
-          name: Upload the code coverage measurements to codecov.io, resulted from running the test suite (unit tests)
-          command: ./.codecov
+          name: Upload the code coverage measurements, resulted from running the test suite (unit tests), to codecov.io
+          command: |
+            curl -s https://codecov.io/bash > .codecov
+            chmod +x .codecov
+            ./.codecov
 
   deploy-to-test-pypi:
-    executor: py38-docker-image
+    executor: python-docker
     steps:
       - checkout
-      - run:
-          name: Install the 'tox' automation tool
-          command: python -m pip install --user tox
+      - install-tox
       - run:
           name: Check code to comply with best practices of Python packaging ecosystem (pypi, pip, etc)
           command: tox -e check -vv
@@ -104,11 +139,16 @@ jobs:
       - run:
           name: Deploy package (source distro & wheel) to 'testpypi' (index) server
           command: tox -e deploy -vv
+      - persist_to_workspace:
+          root: .
+          paths:
+            - tests
 
   integration-test:
-    executor: py38-docker-image
+    executor: python-docker
     steps:
-      - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: Install the package from test.pypi.org
           command: pip install --no-deps --index-url https://test.pypi.org/simple/ software-patterns
@@ -120,7 +160,7 @@ jobs:
           command: pytest tests -v
 
   visualize_code:
-    executor: py38-docker-image
+    executor: python-docker
     steps:
       - checkout
       - run: sudo apt-get update -y --allow-releaseinfo-change
@@ -128,9 +168,7 @@ jobs:
       - run:
           name: Install the dot binary included in the graphviz package/distribution
           command: sudo apt-get install graphviz
-      - run:
-          name: Install tox automation tool
-          command: python -m pip install --user tox
+      - install-tox
       - run:
           name: Visualize dependency graphs as .svg files
           command: tox -e graphs -vv
@@ -144,25 +182,40 @@ jobs:
           path: uml-diagrams
           destination: uml-diagrams
 
+
 workflows:
   version: 2
   build_accept:
     jobs:
+      - build-n-test:
+          matrix:
+            parameters:
+              python_version:
+                - "3.6.15"
+                - "3.7.12"
+                - "3.9.9"
+                - "3.10"
+          filters:
+            branches:
+              only:
+                - master
+                - dev
+                - test-pypi
 
-      - build_n_test:
+      - build-test-report:
           filters:
             tags:
               only: /.*/  # runs for all branches and all tags
 
       - send-coverage-to-codacy:
           requires:
-            - build_n_test
+            - build-test-report
           filters:
             tags:
               only: /.*/
       - send-coverage-to-codecov:
           requires:
-            - build_n_test
+            - build-test-report
           filters:
             tags:
               only: /.*/
@@ -172,21 +225,25 @@ workflows:
             branches:
               only:
                 - master
+                - dev
                 - visualize-code
 
-      # - build-documentation:
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
-      #           - dev
-      #           - release-staging
+      - build-documentation:
+          filters:
+            branches:
+              only:
+                - master
+                - dev
+                - docs
+                - test-pypi
+
       - deploy-to-test-pypi:
           requires:
-            - build_n_test
+            - build-test-report
           filters:
             branches:
               only: test-pypi
+
       - integration-test:
           requires:
             - deploy-to-test-pypi

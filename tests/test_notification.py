@@ -24,8 +24,15 @@ def test_observers_sanity_test1(subject):
 def test_observer_as_constructor(observer):
     with pytest.raises(TypeError) as instantiation_from_interface_error:
         _observer_instance = observer()
-    assert "Can't instantiate abstract class Observer with abstract methods update" in str(instantiation_from_interface_error.value)
 
+    import re
+    runtime_exception_message_reg = "Can't instantiate abstract class " \
+        "Observer with abstract methods? update"
+
+    assert re.match(
+        runtime_exception_message_reg,
+        str(instantiation_from_interface_error.value)
+    )
 
 def test_scenario(subject, observer):
 # The client code.

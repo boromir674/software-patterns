@@ -3,7 +3,7 @@
 
 |
 
-|circleci| |codecov| |better_code_hub| |codacy| |code_climate| |maintainability| |scrutinizer|
+|circleci| |codecov| |better_code_hub| |scrutinizer|
 |pypi| |py_versions| |wheel| |commits_since|
 
       
