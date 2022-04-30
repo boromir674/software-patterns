@@ -1,4 +1,4 @@
-__version__ = '1.1.0'
+__version__ = '1.1.2'
 
 from .notification import Observer, Subject
 from .memoize import ObjectsPool
