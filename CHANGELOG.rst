@@ -1,6 +1,13 @@
 Changelog
 =========
 
+1.1.2 (2022-04-30)
+------------------
+
+docs
+^^^^
+- add badge in README to show number of monthly downloads from pypi
+
 1.1.0 (22-02-06)
 -----------------
 
