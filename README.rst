@@ -149,3 +149,6 @@ Example code to use the `factory` pattern in the form of a `(sub) class registry
 
 .. |nb-pypi-downloads| image:: https://img.shields.io/pypi/dm/software-patterns?logo=pypi&logoColor=%239AB3EE
     :alt: PyPI - Downloads
+
+
+.. _`CI Workflow`: https://circleci.com/gh/boromir674/software-patterns
