@@ -1,5 +1,5 @@
 Software Patterns
-=================
+#################
 
 A Python package with common Software Design Patterns.
 
@@ -13,28 +13,41 @@ A Python package with common Software Design Patterns.
       - | |circleci| |codecov| |docs|
 
     * - package
-      - | |pypi| |wheel| |py_versions| |commits_since|
+      - | |pypi| |py_versions| |nb-pypi-downloads| |wheel| |commits_since|
 
     * - code quality
-      - |better_code_hub| |codacy| |code_climate| |maintainability| |scrutinizer|
+      - |better_code_hub| |scrutinizer|
 
 
 |
-| **Documentation:** https://software-patterns.readthedocs.io/en/master
-| **Source Code:** https://github.com/boromir674/software-patterns
-| **CI/CD:** https://circleci.com/gh/boromir674/software-patterns/tree/master
+| **Documentation:** https://software-patterns.readthedocs.io/en/dev
+| **Source Code:** https://github.com/boromir674/software-patterns/tree/dev
+| **CI/CD:** https://circleci.com/gh/boromir674/software-patterns/tree/dev
 |
-
 
 
 Overview
 ========
 
-This package exposes a set of Python objects (ie Classes) that allow convient usage of common
+This repository hosts the open-source code of the Software Patterns project.
+The project's main component is the `software-patterns` python package hosted on Pypi at https://pypi.org/project/software-patterns
+It also features online Documentation Pages hosted at https://software-patterns.readthedocs.io/ and
+a public `CI workflow`_ hosted on CircleCI.
+
+
+What are Software Design Patterns?
+
+Software Engineers are employing various designs and solutions to solve their problems.
+The emerging (software) patterns, among the code solutions, targeting reoccuring problems have been studied and
+formalized in terms of how they are used, what problem they solve and why they are a fit candidate to solve it.
+These code designs, which are frequently found in various code bases, are known as Software Design Patterns.
+
+
+The `software-patterns` package exposes a set of Python Classes that allow convient usage of common
 Software Design Patterns.
 
 
-Key features of the package:
+Design Patterns implemented:
 
 * Notification (aka Broadcast/Listener pattern)
 * Object Pool (aka Memoize)
@@ -49,23 +62,63 @@ Install from the Pypi server:
 
 ::
 
-    pip install software_patterns
+    pip install software-patterns
 
 .. inclusion-marker-do-not-remove
 
 
-.. |circleci|  image:: https://img.shields.io/circleci/build/github/boromir674/software-patterns/master?logo=circleci
+Quickstart
+----------
+
+
+Example code to use the `factory` pattern in the form of a `(sub) class registry`:
+
+.. code-block:: python
+
+    from software_patterns import SubclassRegistry
+
+    class MyClassRegistry(metaclass=SubclassRegistry):
+        pass
+
+    @MyClassRegistry.register_as_subclass('a')
+    class ClassA:
+        def __init__(self, number):
+            self.attr = number
+
+    @MyClassRegistry.register_as_subclass('b')
+    class ClassB:
+        def __init__(self, number):
+            self.attr = number - 1
+
+    assert MyClassRegistry.subclasses == {'a': ClassA, 'b': ClassB}
+
+    instance_a = MyClassRegistry.create('a', 10)
+    assert type(instance_a) == ClassA
+    assert instance_a.attr == 10
+
+    assert isinstance(instance_a, ClassA)
+
+    instance_b = MyClassRegistry.create('b', 10)
+    assert type(instance_b) == ClassB
+    assert instance_b.attr == 9
+
+    assert isinstance(instance_b, ClassB)
+
+
+
+
+.. |circleci|  image:: https://img.shields.io/circleci/build/github/boromir674/software-patterns/dev?logo=circleci
     :alt: CircleCI
-    :target: https://circleci.com/gh/boromir674/software-patterns/tree/master
+    :target: https://circleci.com/gh/boromir674/software-patterns/tree/dev
 
 
-.. |codecov| image:: https://codecov.io/gh/boromir674/software-patterns/branch/master/graph/badge.svg?token=3POTVNU0L4
+.. |codecov| image:: https://codecov.io/gh/boromir674/software-patterns/branch/dev/graph/badge.svg?token=3POTVNU0L4
     :alt: Codecov
-    :target: https://app.codecov.io/gh/boromir674/software-patterns/branch/master
+    :target: https://app.codecov.io/gh/boromir674/software-patterns/branch/dev
 
 
-.. |docs| image:: https://img.shields.io/readthedocs/software-patterns/latest?logo=readthedocs
-    :target: https://software-patterns.readthedocs.io/en/latest/?badge=latest
+.. |docs| image:: https://img.shields.io/readthedocs/software-patterns/dev?logo=readthedocs
+    :target: https://software-patterns.readthedocs.io/en/dev/?badge=dev
     :alt: Read the Docs (version)
 
 .. |pypi| image:: https://img.shields.io/pypi/v/software-patterns?color=blue&label=pypi&logo=pypi&logoColor=%23849ed9
@@ -80,28 +133,22 @@ Install from the Pypi server:
     :alt: PyPI - Python Version
     :target: https://pypi.org/project/software-patterns
 
-.. |commits_since| image:: https://img.shields.io/github/commits-since/boromir674/software-patterns/v1.0.0/master?color=blue&logo=Github
+.. |commits_since| image:: https://img.shields.io/github/commits-since/boromir674/software-patterns/v1.1.0/dev?color=blue&logo=Github
     :alt: GitHub commits since tagged version (branch)
-    :target: https://github.com/boromir674/software-patterns/compare/v1.0.0..master
+    :target: https://github.com/boromir674/software-patterns/compare/v1.1.0..master
 
 
 
-.. |better_code_hub| image:: https://bettercodehub.com/edge/badge/boromir674/software-patterns?branch=master
+.. |better_code_hub| image:: https://bettercodehub.com/edge/badge/boromir674/software-patterns?branch=dev
     :alt: Better Code Hub
     :target: https://bettercodehub.com/
 
-.. |codacy| image:: https://app.codacy.com/project/badge/Grade/07b27ac547a94708aefc5e845d2b6d01
-    :alt: Codacy
-    :target: https://www.codacy.com/gh/boromir674/software-patterns/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=boromir674/software-patterns&amp;utm_campaign=Badge_Grade
-
-.. |code_climate| image:: https://api.codeclimate.com/v1/badges/2ea98633f88b75e87d1a/maintainability
-   :alt: Maintainability
-   :target: https://codeclimate.com/github/boromir674/software-patterns/maintainability
-
-.. |maintainability| image:: https://img.shields.io/codeclimate/tech-debt/boromir674/software-patterns?logo=CodeClimate
-    :alt: Technical Debt
-    :target: https://codeclimate.com/github/boromir674/software-patterns/maintainability
-
-.. |scrutinizer| image:: https://img.shields.io/scrutinizer/quality/g/boromir674/software-patterns/master?logo=scrutinizer-ci
+.. |scrutinizer| image:: https://img.shields.io/scrutinizer/quality/g/boromir674/software-patterns/dev?logo=scrutinizer-ci
     :alt: Scrutinizer code quality
-    :target: https://scrutinizer-ci.com/g/boromir674/software-patterns/?branch=master
+    :target: https://scrutinizer-ci.com/g/boromir674/software-patterns/?branch=dev
+
+.. |nb-pypi-downloads| image:: https://img.shields.io/pypi/dm/software-patterns?logo=pypi&logoColor=%239AB3EE
+    :alt: PyPI - Downloads
+
+
+.. _`CI Workflow`: https://circleci.com/gh/boromir674/software-patterns
