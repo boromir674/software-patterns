@@ -1,3 +1,6 @@
-sphinx==3.1.2
+furo>=2021.08.31
+sphinx~=4.0
+sphinx-argparse-cli>=1.5
+sphinx-autodoc-typehints>=1.10
 sphinx-rtd-theme==0.5.0
 sphinxcontrib-spelling
