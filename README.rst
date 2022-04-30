@@ -13,7 +13,7 @@ A Python package with common Software Design Patterns.
       - | |circleci| |codecov| |docs|
 
     * - package
-      - | |pypi| |wheel| |py_versions| |commits_since|
+      - | |pypi| |py_versions| |nb-pypi-downloads| |wheel| |commits_since|
 
     * - code quality
       - |better_code_hub| |scrutinizer|
@@ -146,3 +146,6 @@ Example code to use the `factory` pattern in the form of a `(sub) class registry
 .. |scrutinizer| image:: https://img.shields.io/scrutinizer/quality/g/boromir674/software-patterns/dev?logo=scrutinizer-ci
     :alt: Scrutinizer code quality
     :target: https://scrutinizer-ci.com/g/boromir674/software-patterns/?branch=dev
+
+.. |nb-pypi-downloads| image:: https://img.shields.io/pypi/dm/software-patterns?logo=pypi&logoColor=%239AB3EE
+    :alt: PyPI - Downloads
