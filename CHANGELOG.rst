@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.1.3 (2022-04-30)
+------------------
+
+docs
+^^^^
+- set badges in README to target the master branch
+
+
 1.1.2 (2022-04-30)
 ------------------
 
