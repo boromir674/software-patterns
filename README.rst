@@ -20,9 +20,9 @@ A Python package with common Software Design Patterns.
 
 
 |
-| **Documentation:** https://software-patterns.readthedocs.io/en/dev
-| **Source Code:** https://github.com/boromir674/software-patterns/tree/dev
-| **CI/CD:** https://circleci.com/gh/boromir674/software-patterns/tree/dev
+| **Documentation:** https://software-patterns.readthedocs.io/en/master
+| **Source Code:** https://github.com/boromir674/software-patterns/tree/master
+| **CI/CD:** https://circleci.com/gh/boromir674/software-patterns/
 |
 
 
@@ -107,18 +107,18 @@ Example code to use the `factory` pattern in the form of a `(sub) class registry
 
 
 
-.. |circleci|  image:: https://img.shields.io/circleci/build/github/boromir674/software-patterns/dev?logo=circleci
+.. |circleci|  image:: https://img.shields.io/circleci/build/github/boromir674/software-patterns/master?logo=circleci
     :alt: CircleCI
-    :target: https://circleci.com/gh/boromir674/software-patterns/tree/dev
+    :target: https://circleci.com/gh/boromir674/software-patterns/tree/master
 
 
-.. |codecov| image:: https://codecov.io/gh/boromir674/software-patterns/branch/dev/graph/badge.svg?token=3POTVNU0L4
+.. |codecov| image:: https://codecov.io/gh/boromir674/software-patterns/branch/master/graph/badge.svg?token=3POTVNU0L4
     :alt: Codecov
-    :target: https://app.codecov.io/gh/boromir674/software-patterns/branch/dev
+    :target: https://app.codecov.io/gh/boromir674/software-patterns/branch/master
 
 
-.. |docs| image:: https://img.shields.io/readthedocs/software-patterns/dev?logo=readthedocs
-    :target: https://software-patterns.readthedocs.io/en/dev/?badge=dev
+.. |docs| image:: https://img.shields.io/readthedocs/software-patterns/master?logo=readthedocs
+    :target: https://software-patterns.readthedocs.io/en/master/?badge=master
     :alt: Read the Docs (version)
 
 .. |pypi| image:: https://img.shields.io/pypi/v/software-patterns?color=blue&label=pypi&logo=pypi&logoColor=%23849ed9
@@ -133,19 +133,19 @@ Example code to use the `factory` pattern in the form of a `(sub) class registry
     :alt: PyPI - Python Version
     :target: https://pypi.org/project/software-patterns
 
-.. |commits_since| image:: https://img.shields.io/github/commits-since/boromir674/software-patterns/v1.1.2/dev?color=blue&logo=Github
+.. |commits_since| image:: https://img.shields.io/github/commits-since/boromir674/software-patterns/v1.1.2/master?color=blue&logo=Github
     :alt: GitHub commits since tagged version (branch)
     :target: https://github.com/boromir674/software-patterns/compare/v1.1.2..master
 
 
 
-.. |better_code_hub| image:: https://bettercodehub.com/edge/badge/boromir674/software-patterns?branch=dev
+.. |better_code_hub| image:: https://bettercodehub.com/edge/badge/boromir674/software-patterns?branch=master
     :alt: Better Code Hub
     :target: https://bettercodehub.com/
 
-.. |scrutinizer| image:: https://img.shields.io/scrutinizer/quality/g/boromir674/software-patterns/dev?logo=scrutinizer-ci
+.. |scrutinizer| image:: https://img.shields.io/scrutinizer/quality/g/boromir674/software-patterns/master?logo=scrutinizer-ci
     :alt: Scrutinizer code quality
-    :target: https://scrutinizer-ci.com/g/boromir674/software-patterns/?branch=dev
+    :target: https://scrutinizer-ci.com/g/boromir674/software-patterns/?branch=master
 
 .. |nb-pypi-downloads| image:: https://img.shields.io/pypi/dm/software-patterns?logo=pypi&logoColor=%239AB3EE
     :alt: PyPI - Downloads
