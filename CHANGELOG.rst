@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.2.1 (2022-05-04)
+------------------
+
+fix
+^^^
+- correctly declare supported types through setup.cfg and setuptools
+
+
 1.2.0 (2022-05-04)
 ------------------
 
