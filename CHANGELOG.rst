@@ -1,6 +1,14 @@
 Changelog
 =========
 
+1.2.0 (2022-05-04)
+------------------
+
+feature
+^^^^^^^
+- enable types to be recognized by packages importing the software_patterns library
+
+
 1.1.3 (2022-04-30)
 ------------------
 
