@@ -2,6 +2,20 @@
 Changelog
 =========
 
+1.3.0 (2022-06-10)
+==================
+
+Releasing the Singleton Pattern, implemented as a Python Metaclass.
+
+Changes
+^^^^^^^
+
+feature
+"""""""
+- add Singleton Pattern
+
+
+
 1.2.1 (2022-05-04)
 ------------------
 
