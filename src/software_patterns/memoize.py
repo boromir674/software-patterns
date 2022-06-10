@@ -4,12 +4,10 @@ Memoize is implemented using an Object Pool which is queried by a key which is
 the result of computing a hash given runtime arguments.
 
 """
-from typing import Dict, Generic, TypeVar, Any, Callable, Optional, Union
 import types
-
+from typing import Any, Callable, Dict, Generic, Optional, TypeVar, Union
 
 __all__ = ['ObjectsPool']
-
 
 
 DictKey = Union[int, str]
@@ -21,6 +19,7 @@ RuntimeBuildHashCallable = Callable[..., Union[int, str]]
 def adapt_build_hash(a_callable: RuntimeBuildHashCallable):
     def build_hash(_self: ObjectType, *args, **kwargs):
         return a_callable(*args, **kwargs)
+
     return build_hash
 
 
@@ -60,6 +59,7 @@ class ObjectsPool(Generic[ObjectType]):
     Returns:
         [type]: [description]
     """
+
     _objects: Dict[DictKey, ObjectType]
 
     user_supplied_callback: Dict[bool, Callable] = {
@@ -67,16 +67,27 @@ class ObjectsPool(Generic[ObjectType]):
         False: lambda callback: ObjectsPool.__build_hash,
     }
 
-    def __init__(self, callback: Callable[..., ObjectType], hash_callback: Optional[RuntimeBuildHashCallable]=None):
+    def __init__(
+        self,
+        callback: Callable[..., ObjectType],
+        hash_callback: Optional[RuntimeBuildHashCallable] = None,
+    ):
         self.constructor = callback
-        build_hash_callback = self.user_supplied_callback[callable(hash_callback)](hash_callback)
+        build_hash_callback = self.user_supplied_callback[callable(hash_callback)](
+            hash_callback
+        )
         self._build_hash = types.MethodType(adapt_build_hash(build_hash_callback), self)
         self._objects = {}
 
     @staticmethod
     def __build_hash(*args: Any, **kwargs: Any) -> int:
         r"""Construct a hash out of the input \*args and \*\*kwargs."""
-        return hash('-'.join([str(_) for _ in args] + [f'{key}={str(value)}' for key, value in kwargs.items()]))
+        return hash(
+            '-'.join(
+                [str(_) for _ in args]
+                + [f'{key}={str(value)}' for key, value in kwargs.items()]
+            )
+        )
 
     def get_object(self, *args: Any, **kwargs: Any) -> ObjectType:
         r"""Request an object from the pool.

@@ -13,6 +13,7 @@ def simple_memoize():
         @staticmethod
         def factory_method(arg1, arg2, **kwargs):
             return TestClass(arg1, arg2)
+
     return ObjectsPool(TestClass.factory_method)
 
 
@@ -24,4 +25,9 @@ def test_simple_memoize(simple_memoize):
     assert instance1 == instance2
     assert id(instance1) == id(instance2)
     hash1 = simple_memoize._build_hash(*runtime_args, **runtime_kwargs)
-    assert hash1 == hash('-'.join([str(_) for _ in runtime_args] + [f'{key}={str(value)}' for key, value in runtime_kwargs.items()]))
+    assert hash1 == hash(
+        '-'.join(
+            [str(_) for _ in runtime_args]
+            + [f'{key}={str(value)}' for key, value in runtime_kwargs.items()]
+        )
+    )
