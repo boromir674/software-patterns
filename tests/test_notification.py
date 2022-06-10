@@ -4,12 +4,14 @@ import pytest
 @pytest.fixture
 def subject():
     from software_patterns import Subject
+
     return Subject
 
 
 @pytest.fixture
 def observer():
     from software_patterns import Observer
+
     return Observer
 
 
@@ -26,18 +28,21 @@ def test_observer_as_constructor(observer):
         _observer_instance = observer()
 
     import re
-    runtime_exception_message_reg = "Can't instantiate abstract class " \
-        "Observer with abstract methods? update"
 
-    assert re.match(
-        runtime_exception_message_reg,
-        str(instantiation_from_interface_error.value)
+    runtime_exception_message_reg = (
+        "Can't instantiate abstract class " "Observer with abstract methods? update"
     )
 
+    assert re.match(
+        runtime_exception_message_reg, str(instantiation_from_interface_error.value)
+    )
+
+
 def test_scenario(subject, observer):
-# The client code.
+    # The client code.
 
     print("------ Scenario 1 ------\n")
+
     class ObserverA(observer):
         def update(self, a_subject) -> None:
             print("ObserverA: Reacted to the event")
@@ -53,7 +58,6 @@ def test_scenario(subject, observer):
     print("------ Scenario 2 ------\n")
     # example 2
     class Businessubject(subject):
-
         def some_business_logic(self) -> None:
             """
             Usually, the subscription logic is only a fraction of what a Subject can

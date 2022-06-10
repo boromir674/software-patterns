@@ -2,7 +2,7 @@
 (common parent) class.
 """
 
-from typing import TypeVar, Generic, Dict
+from typing import Dict, Generic, TypeVar
 
 T = TypeVar('T')
 
@@ -50,6 +50,7 @@ class SubclassRegistry(type, Generic[T]):
         >>> {k: v.__name__ for k, v in ClassRegistry.subclasses.items()}
         {'child': 'ChildClass'}
     """
+
     subclasses: Dict[str, type]
 
     def __init__(cls, *args):
@@ -73,16 +74,20 @@ class SubclassRegistry(type, Generic[T]):
             object: the instance of the registered subclass
         """
         if subclass_identifier not in cls.subclasses:
-            raise UnknownClassError(f'Bad "{str(cls.__name__)}" subclass request; requested subclass with identifier '
-                             f'{str(subclass_identifier)}, but known identifiers are '
-                             f'[{", ".join(str(subclass_id) for subclass_id in cls.subclasses.keys())}]')
+            raise UnknownClassError(
+                f'Bad "{str(cls.__name__)}" subclass request; requested subclass with identifier '
+                f'{str(subclass_identifier)}, but known identifiers are '
+                f'[{", ".join(str(subclass_id) for subclass_id in cls.subclasses.keys())}]'
+            )
         try:
             return cls.subclasses[subclass_identifier](*args, **kwargs)
         except Exception as any_error:
-            raise InstantiationError('Error during instance object construction.'
+            raise InstantiationError(
+                'Error during instance object construction.'
                 f' Failed to create instance of class {cls.subclasses[subclass_identifier]}'
                 f' using args [{", ".join((str(_) for _ in args))}]'
-                f' and kwargs [{", ".join(f"{k}={v}" for k, v in kwargs.items())}]') from any_error
+                f' and kwargs [{", ".join(f"{k}={v}" for k, v in kwargs.items())}]'
+            ) from any_error
 
     def register_as_subclass(cls, subclass_identifier):
         """Register a class as subclass of the parent class.
@@ -93,6 +98,7 @@ class SubclassRegistry(type, Generic[T]):
         Args:
             subclass_identifier (str): the user-defined identifier, under which to register the subclass
         """
+
         def wrapper(subclass):
             """Add the (sub) class provided to the parent class registry.
 
@@ -104,8 +110,13 @@ class SubclassRegistry(type, Generic[T]):
             """
             cls.subclasses[subclass_identifier] = subclass
             return subclass
+
         return wrapper
 
 
-class InstantiationError(Exception): pass
-class UnknownClassError(Exception): pass
+class InstantiationError(Exception):
+    pass
+
+
+class UnknownClassError(Exception):
+    pass
