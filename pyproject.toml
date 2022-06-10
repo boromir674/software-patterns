@@ -1,3 +1,20 @@
 [build-system]
 requires = ["setuptools >= 40.6.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+
+## Black formatting/linting
+
+[tool.black]
+line-length = 95
+include = '\.pyi?$'
+extend-exclude = '''
+'''
+
+
+[tool.isort]
+profile = 'black'
+
+
+[tool.software-release]
+version_variable = "src/software_patterns/__init__.py:__version__"

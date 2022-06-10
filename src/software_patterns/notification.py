@@ -25,7 +25,7 @@ subscribe/unsubscribe (attach/detach) observers and also with a method to
 """
 
 from abc import ABC, abstractmethod
-from typing import List, Generic, TypeVar
+from typing import Generic, List, TypeVar
 
 __all__ = ['Subject', 'Observer']
 
@@ -39,6 +39,7 @@ class ObserverInterface(ABC):
     Enables objects to act as "event" listeners; react to "notifications"
     by executing specific (event) handling logic.
     """
+
     @abstractmethod
     def update(self, *args, **kwargs) -> None:
         """Receive an update (from a subject); handle an event notification."""
@@ -121,6 +122,7 @@ class Subject(SubjectInterface, Generic[StateType]):
         >>> broadcaster.notify()
         observer-type-a reacts to event event-object-B
     """
+
     def __init__(self, *args, **kwargs):
         self._observers: List[ObserverInterface] = []
         self._state = None

@@ -1,8 +1,10 @@
 import pytest
 
+
 @pytest.fixture
 def proxy_module():
     from software_patterns import proxy
+
     return proxy
 
 
@@ -10,6 +12,7 @@ def proxy_module():
 def dummy_handle():
     def handle(self, *args, **kwargs):
         return f'{type(self).__name__} handle request with args [{", ".join((str(_) for _ in args))}] and kwargs [{", ".join(f"{k}={v}" for k, v in kwargs.items())}]'
+
     return handle
 
 
@@ -18,7 +21,7 @@ def test_proxy_behaviour(proxy_module, dummy_handle, capsys):
 
     # replicate client code that wants to use the proxy pattern
 
-    # Derive from class RealSubject or use 'python overloading' (use a class 
+    # Derive from class RealSubject or use 'python overloading' (use a class
     # that has a 'request' method with the same signature as ReadSubject.request)
     class ClientSubject(prm.ProxySubject):
         def request(self, *args, **kwargs):
@@ -30,7 +33,6 @@ def test_proxy_behaviour(proxy_module, dummy_handle, capsys):
 
     # Derive from Proxy
     class ClientProxy(prm.Proxy):
-
         def request(self, *args, **kwargs):
 
             # run proxy code before sending request to the "proxied" handler
@@ -45,8 +47,10 @@ def test_proxy_behaviour(proxy_module, dummy_handle, capsys):
             after_args = list(['after'] + list(args))
             print(dummy_handle(self, *after_args, **kwargs))
             return _
+
     def _dummy_callback(*args, **kwargs):
         return None
+
     real_subject = ClientSubject(_dummy_callback)
     proxy = ClientProxy(real_subject)
 
@@ -59,7 +63,10 @@ def test_proxy_behaviour(proxy_module, dummy_handle, capsys):
 
     captured = capsys.readouterr()
     assert captured.out == dummy_handle(real_subject, 1, 2, k1='v1') + '\n'
-    assert captured.out == f'ClientSubject handle request with args [{", ".join(str(_) for _ in args)}] and kwargs [{", ".join(f"{k}={v}" for k, v in kwargs.items())}]\n'
+    assert (
+        captured.out
+        == f'ClientSubject handle request with args [{", ".join(str(_) for _ in args)}] and kwargs [{", ".join(f"{k}={v}" for k, v in kwargs.items())}]\n'
+    )
     assert result == type(real_subject).__name__
     assert result == 'ClientSubject'
 
@@ -67,11 +74,20 @@ def test_proxy_behaviour(proxy_module, dummy_handle, capsys):
     result = proxy.request(*args, **kwargs)
 
     captured = capsys.readouterr()
-    assert captured.out == dummy_handle(*list([proxy, 'before'] + args), **kwargs) +'\n' + \
-        dummy_handle(*list([real_subject] + args), **kwargs) + '\n' + \
-        dummy_handle(*list([proxy, 'after'] + args), **kwargs) +'\n'
-    assert captured.out == f'ClientProxy handle request with args [{", ".join(str(_) for _ in ["before"] + args)}] and kwargs [{", ".join(f"{k}={v}" for k, v in kwargs.items())}]\n' + \
-        f'ClientSubject handle request with args [{", ".join(str(_) for _ in args)}] and kwargs [{", ".join(f"{k}={v}" for k, v in kwargs.items())}]\n' + \
-        f'ClientProxy handle request with args [{", ".join(str(_) for _ in ["after"] + args)}] and kwargs [{", ".join(f"{k}={v}" for k, v in kwargs.items())}]\n'
+    assert (
+        captured.out
+        == dummy_handle(*list([proxy, 'before'] + args), **kwargs)
+        + '\n'
+        + dummy_handle(*list([real_subject] + args), **kwargs)
+        + '\n'
+        + dummy_handle(*list([proxy, 'after'] + args), **kwargs)
+        + '\n'
+    )
+    assert (
+        captured.out
+        == f'ClientProxy handle request with args [{", ".join(str(_) for _ in ["before"] + args)}] and kwargs [{", ".join(f"{k}={v}" for k, v in kwargs.items())}]\n'
+        + f'ClientSubject handle request with args [{", ".join(str(_) for _ in args)}] and kwargs [{", ".join(f"{k}={v}" for k, v in kwargs.items())}]\n'
+        + f'ClientProxy handle request with args [{", ".join(str(_) for _ in ["after"] + args)}] and kwargs [{", ".join(f"{k}={v}" for k, v in kwargs.items())}]\n'
+    )
     assert result == type(real_subject).__name__
     assert result == 'ClientSubject'

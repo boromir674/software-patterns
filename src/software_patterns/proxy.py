@@ -4,12 +4,56 @@ This module contains boiler-plate code to supply the Proxy structural software
 design pattern, to the client code."""
 
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, Callable
+from typing import Callable, Generic, TypeVar
 
 T = TypeVar('T')
 
 
 __all__ = ['ProxySubject', 'Proxy']
+
+
+class ProxySubjectInterfaceClass(type, Generic[T]):
+    """Interfacing enabling classes to construct classes (instead of instances).
+
+    Dynamically creates classes that represent a ProxySubjectInterface.
+    The created classes automatically gain an abstract method with name given at
+    creation time. The input name can match the desired named selected to a
+    proxied object.
+
+    For example in a scenario where you proxy a remote web server you might
+    create ProxySubjectInterface with a 'make_request' abstract method where as
+    in a scenario where the proxied object is a Tensorflow function you might
+    name the abstract method as 'tensorflow'.
+
+    Dynamically, creating a class (as this class allows) is useful to adjust to
+    scenarios like the above.
+
+    Args:
+        Generic ([type]): [description]
+
+    Raises:
+        NotImplementedError: [description]
+
+    Returns:
+        [type]: [description]
+    """
+
+    def __new__(mcs, *args, **kwargs):
+        def __init__(self, proxied_object):
+            self._proxy_subject = proxied_object
+
+        def object(self, *args, **kwargs) -> T:
+            return self._proxy_subject
+
+        return super().__new__(
+            mcs,
+            'ProxySubjectInterface',
+            (ABC,),
+            {
+                '__init__': __init__,
+                args[0]: object,
+            },
+        )
 
 
 class ProxySubjectInterface(ABC, Generic[T]):
@@ -19,6 +63,7 @@ class ProxySubjectInterface(ABC, Generic[T]):
     the Proxy. As long as the client uses ProxySubject's interface, a proxy can
     be passed pass to it, instead of a real subject.
     """
+
     @abstractmethod
     def request(self, *args, **kwargs) -> T:
         raise NotImplementedError
@@ -42,6 +87,7 @@ class ProxySubject(ProxySubjectInterface, Generic[T]):
         >>> proxied_object.request(1)
         2
     """
+
     def __init__(self, callback: Callable[..., T]):
         self._callback = callback
 
@@ -74,6 +120,7 @@ class Proxy(ProxySubjectInterface, Generic[T]):
         >>> proxy.request(3)
         9
     """
+
     def __init__(self, proxy_subject: ProxySubject):
         self._proxy_subject = proxy_subject
 
