@@ -15,9 +15,9 @@ executors:
     docker:
       - image: cimg/openjdk:15.0.1
 
-  ubuntu-1604-vm:
+  ubuntu-2022:
     machine:
-      image: ubuntu-1604:201903-01
+      image: ubuntu-2004:2022.10.1
 
 
 commands:
@@ -114,7 +114,7 @@ jobs:
             java -jar codacy-coverage-reporter-assembly.jar report -l Python -r coverage.xml
 
   send-coverage-to-codecov:
-    executor: ubuntu-1604-vm
+    executor: ubuntu-2022
     steps:
       - attach_workspace:
           at: .
