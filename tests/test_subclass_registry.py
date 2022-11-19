@@ -114,7 +114,7 @@ def test_subclass_registry(use_metaclass, subclass_registry_module):
     assert ParentClass.subclasses['child1'] == Child1
 
 
-def test_create_wrong_input(subclass_registry_module):
+def test_create_wrong_input():
     from software_patterns import SubclassRegistry
     from software_patterns.subclass_registry import InstantiationError
 
