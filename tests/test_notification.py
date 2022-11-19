@@ -1,31 +1,22 @@
 import pytest
 
-
-@pytest.fixture
-def subject():
-    from software_patterns import Subject
-
-    return Subject
+from software_patterns import Observer, Subject
 
 
-@pytest.fixture
-def observer():
-    from software_patterns import Observer
-
-    return Observer
-
-
-def test_observers_sanity_test1(subject):
-    subject1 = subject([])
-    subject2 = subject([])
+def test_observers_sanity_test():
+    subject1: Subject = Subject([])
+    subject2: Subject = Subject([])
     assert hasattr(subject1, '_observers')
     assert hasattr(subject2, '_observers')
     assert id(subject1._observers) != id(subject2._observers)
 
 
-def test_observer_as_constructor(observer):
+# def test_observer_as_constructor(observer: t.Type[Observer]):
+def test_observer_as_constructor():
+    observer = Observer
+
     with pytest.raises(TypeError) as instantiation_from_interface_error:
-        _observer_instance = observer()
+        _observer_instance = observer()  # type: ignore[abstract]
 
     import re
 
@@ -38,16 +29,15 @@ def test_observer_as_constructor(observer):
     )
 
 
-def test_scenario(subject, observer):
+# def test_scenario(subject: t.Type[Subject], observer: t.Type[Observer]):
+def test_scenario():
+    # Scenario 1
     # The client code.
-
-    print("------ Scenario 1 ------\n")
-
-    class ObserverA(observer):
-        def update(self, a_subject) -> None:
+    class ObserverA(Observer):
+        def update(self, *args, **kwargs) -> None:
             print("ObserverA: Reacted to the event")
 
-    s1 = subject([])
+    s1: Subject = Subject([])
     o1 = ObserverA()
     s1.attach(o1)
 
@@ -55,9 +45,8 @@ def test_scenario(subject, observer):
     s1.state = 0
     s1.notify()
 
-    print("------ Scenario 2 ------\n")
-    # example 2
-    class Businessubject(subject):
+    # Scenario 2
+    class Businessubject(Subject):
         def some_business_logic(self) -> None:
             """
             Usually, the subscription logic is only a fraction of what a Subject can
@@ -70,9 +59,10 @@ def test_scenario(subject, observer):
             print(f"Subject: My state has just changed to: {self._state}")
             self.notify()
 
-    class ObserverB(observer):
-        def update(self, a_subject) -> None:
-            if a_subject.state == 0 or a_subject.state >= 2:
+    class ObserverB(Observer):
+        def update(self, *args, **kwargs) -> None:
+            subject = args[0]
+            if subject.state == 0 or subject.state >= 2:
                 print("ObserverB: Reacted to the event")
 
     s2 = Businessubject([])

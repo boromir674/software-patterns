@@ -1,8 +1,8 @@
-__version__ = '1.3.0'
+__version__ = '2.0.0'
 
 from .memoize import ObjectsPool
 from .notification import Observer, Subject
-from .proxy import Proxy, ProxySubject
+from .proxy import Proxy
 from .singleton import Singleton
 from .subclass_registry import SubclassRegistry
 
@@ -11,7 +11,6 @@ __all__ = [
     'Subject',
     'ObjectsPool',
     'SubclassRegistry',
-    'ProxySubject',
     'Proxy',
     'Singleton',
 ]

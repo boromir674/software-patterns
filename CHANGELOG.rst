@@ -2,6 +2,38 @@
 Changelog
 =========
 
+2.0.0 (2022-11-19)
+==================
+
+Redesign the Proxy pattern so that it is actually usefull for client code.
+Now, to use the pattern one need only to import the Proxy (class) type
+`from software_patterns import Proxy`
+
+Changes
+^^^^^^^
+
+feature
+"""""""
+- allow flexible adaptation of Proxy pattern with a single entrypoint
+
+refactor
+""""""""
+- fix type checking with mypy on python3.6
+- remove Handler Prototype Pattern
+- static type checking with mypy of test code (along with prod code)
+
+ci
+""
+- update Codecov Job image runner to ubuntu-2004:2022
+- enable CI for Python 3.11
+
+
+breaking
+""""""""
+- Handler Pattern is no longer supported.
+- Removed the ProxySubject type.
+
+
 1.3.0 (2022-06-10)
 ==================
 

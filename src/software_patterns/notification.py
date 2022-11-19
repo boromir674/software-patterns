@@ -25,12 +25,13 @@ subscribe/unsubscribe (attach/detach) observers and also with a method to
 """
 
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar
+from typing import Generic, List, TypeVar, Union
 
 __all__ = ['Subject', 'Observer']
 
 
 StateType = TypeVar('StateType')
+StateVariableType = Union[StateType, None]
 
 
 class ObserverInterface(ABC):
@@ -125,7 +126,7 @@ class Subject(SubjectInterface, Generic[StateType]):
 
     def __init__(self, *args, **kwargs):
         self._observers: List[ObserverInterface] = []
-        self._state = None
+        self._state = StateVariableType
 
     def attach(self, observer: ObserverInterface) -> None:
         self._observers.append(observer)
@@ -142,7 +143,7 @@ class Subject(SubjectInterface, Generic[StateType]):
         self._observers.extend(list(observers))
 
     @property
-    def state(self) -> StateType:
+    def state(self) -> StateVariableType:
         """Get the state of the Subject.
 
         Returns:
