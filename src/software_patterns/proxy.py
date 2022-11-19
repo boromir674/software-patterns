@@ -4,7 +4,7 @@ This module contains boiler-plate code to supply the Proxy structural software
 design pattern, to the client code."""
 
 from abc import ABC, abstractmethod
-from typing import Callable, Generic, TypeVar
+from typing import Any, Callable, Generic, Iterator, TypeVar
 
 T = TypeVar('T')
 
@@ -63,6 +63,7 @@ class ProxySubjectInterface(ABC):
     the Proxy. As long as the client uses ProxySubject's interface, a proxy can
     be passed pass to it, instead of a real subject.
     """
+
     pass
     # @abstractmethod
     # def request(self, *args, **kwargs) -> T:
@@ -119,19 +120,16 @@ class Proxy(ProxySubjectInterface, Generic[T]):
 
     def __init__(self, runtime_proxy: T):
         self._proxy_subject = runtime_proxy
-    
-    # def __call__(self, *args, **kwargs):
-    #     return self._proxy_subject.__call__(*args, **kwargs)
 
-    # def __getattr__(self, name: str):
-    #     return getattr(self._proxy_subject, name)
+    def __getattr__(self, name: str):
+        return getattr(self._proxy_subject, name)
+
+    def __str__(self):
+        return str(self._proxy_subject)
 
     # def __getitem__(self, item):
     #     # return self._proxy_subject[item]
     #     return self._proxy_subject.__getitem__(item)
-    
-    # def __hash__(self):
-    #     return hash(self._proxy_subject)
-    
-    # def __iter__(self):
-    #     return iter(self._proxy_subject)
+
+    def __hash__(self):
+        return hash(self._proxy_subject)

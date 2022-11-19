@@ -23,16 +23,6 @@ def subclass_registry_module():
 
 
 @pytest.fixture
-def subclass_registry_class():
-    from software_patterns import SubclassRegistry
-
-    def get_subclass_registry_class() -> t.Type[SubclassRegistry]:
-        return SubclassRegistry
-
-    return get_subclass_registry_class
-
-
-@pytest.fixture
 def register_class():
     from software_patterns import SubclassRegistry
 

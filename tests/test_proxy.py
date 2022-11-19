@@ -13,10 +13,11 @@ def test_proxy_behaviour(dummy_handle, capsys):
     from typing import List
 
     from software_patterns import Proxy
-    
+
     # replicate client code that wants to use the proxy pattern
     class ClientSubject(object):
-        """"A class with a request instance method."""
+        """ "A class with a request instance method."""
+
         def request(self, *args, **kwargs):
             print(dummy_handle(self, *args, **kwargs))
             return type(self).__name__
@@ -82,9 +83,10 @@ def test_proxy_behaviour(dummy_handle, capsys):
 
 
 def test_simple_proxy():
-    from software_patterns import Proxy
     from typing import Callable
-    
+
+    from software_patterns import Proxy
+
     RemoteCall = Callable[[int], int]
     RemoteCallFactory = Callable[[], RemoteCall]
 
@@ -92,11 +94,88 @@ def test_simple_proxy():
 
     # Code that the developer writes
     VALUE = 10
+
     class ClientProxy(Proxy[RemoteCall]):
         def __call__(self, x: int):
             return self._proxy_subject(x + VALUE)
-        
+
     proxy: ClientProxy = ClientProxy(remote_call)
 
     assert remote_call(2) == 2 + 1
     assert proxy(2) == 2 + VALUE + 1
+
+
+def test_proxy_as_instance():
+    from typing import Callable
+
+    from software_patterns import Proxy
+
+    RemoteCall = Callable[[int], int]
+
+    remote_call: RemoteCall = lambda x: x + 1
+
+    # Code that the developer writes
+    VALUE = 10
+
+    class ClientProxy(Proxy[RemoteCall]):
+        def __call__(self, x: int):
+            return self._proxy_subject(x + VALUE)
+
+    proxy: ClientProxy = ClientProxy(remote_call)
+
+    assert remote_call(2) == 2 + 1
+    assert proxy(2) == 2 + VALUE + 1
+
+    assert hash(proxy) == hash(remote_call)
+
+
+def test_mapping_proxy():
+    from typing import Mapping
+
+    from software_patterns import Proxy
+
+    # test data
+    RemoteMapping = Mapping[str, str]
+
+    remote_mapping: RemoteMapping = {
+        'id_1': 'a',
+        'id_2': 'b',
+    }
+
+    ## Code that the developer writes
+
+    class ClientProxy(Proxy[Mapping]):
+        CACHE = {
+            'id_1': 'a-cached',
+        }
+
+        def __getitem__(self, str_id: str):
+            return self.CACHE.get(str_id, self._proxy_subject[str_id])
+
+        def __contains__(self, element):
+            return element in self._proxy_subject
+
+        def wipe_cache(self):
+            self.CACHE = {}
+
+    proxy: ClientProxy = ClientProxy(remote_mapping)
+
+    # Test code
+    assert remote_mapping['id_1'] == 'a'
+    assert remote_mapping['id_2'] == 'b'
+    assert 'id_1' in remote_mapping
+
+    assert proxy['id_1'] == 'a-cached'
+    assert proxy['id_2'] == 'b'
+    assert 'id_1' in proxy
+
+    # Proxy delegates attribute requests (ie 'keys' as below) to subject
+    assert sorted(remote_mapping.keys()) == sorted(proxy.keys())
+    assert str(proxy) == str(remote_mapping)
+
+    proxy.wipe_cache()
+
+    assert proxy['id_1'] == 'a'
+    assert proxy['id_2'] == 'b'
+    assert sorted(remote_mapping.keys()) == sorted(proxy.keys())
+    assert str(proxy) == str(remote_mapping)
