@@ -61,7 +61,7 @@ def test_scenario():
     # Scenario 1
     # The client code.
     class ObserverA(Observer):
-        def update(self, a_subject) -> None:
+        def update(self, a_subject, *args, **kwargs) -> None:
             print("ObserverA: Reacted to the event")
 
     s1: Subject = Subject([])
@@ -87,7 +87,7 @@ def test_scenario():
             self.notify()
 
     class ObserverB(Observer):
-        def update(self, a_subject) -> None:
+        def update(self, a_subject, *args, **kwargs) -> None:
             if a_subject.state == 0 or a_subject.state >= 2:
                 print("ObserverB: Reacted to the event")
 
