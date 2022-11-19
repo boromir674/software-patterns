@@ -13,7 +13,6 @@ class Singleton(type):
 
         >>> class ObjectDict(metaclass=Singleton):
         ...  def __init__(self):
-        ...   super().__init__()
         ...   self.objects = {}
 
         >>> reg1 = ObjectDict()
