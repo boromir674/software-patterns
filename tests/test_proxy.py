@@ -12,29 +12,25 @@ def dummy_handle():
 def test_proxy_behaviour(dummy_handle, capsys):
     from typing import List
 
-    from software_patterns import proxy as prm
-
+    from software_patterns import Proxy
+    
     # replicate client code that wants to use the proxy pattern
-    # Derive from class RealSubject or use 'python overloading' (use a class
-    # that has a 'request' method with the same signature as ReadSubject.request)
-    class ClientSubject(prm.ProxySubject):
+    class ClientSubject(object):
+        """"A class with a request instance method."""
         def request(self, *args, **kwargs):
-            # delegate handling to the real real subject from client code
-            # so frankly the request method here is also an adapter
             print(dummy_handle(self, *args, **kwargs))
-            super().request(*args, **kwargs)
             return type(self).__name__
 
     # Derive from Proxy
-    class ClientProxy(prm.Proxy):
+    class ClientProxy(Proxy):
         def request(self, *args, **kwargs):
 
             # run proxy code before sending request to the "proxied" handler
             before_args = list(['before'] + list(args))
             print(dummy_handle(self, *before_args, **kwargs))
-
             # handle request with the proxied logic
-            _ = super().request(*args, **kwargs)
+            # _ = super().request(*args, **kwargs)
+            _ = self._proxy_subject.request(*args, **kwargs)
             assert _ == 'ClientSubject'
 
             # run proxy code after request to the "proxied" handler
@@ -42,10 +38,7 @@ def test_proxy_behaviour(dummy_handle, capsys):
             print(dummy_handle(self, *after_args, **kwargs))
             return _
 
-    def _dummy_callback(*args, **kwargs):
-        return None
-
-    real_subject = ClientSubject(_dummy_callback)
+    real_subject = ClientSubject()
     proxy = ClientProxy(real_subject)
 
     # use proxy in a scenario
@@ -86,3 +79,24 @@ def test_proxy_behaviour(dummy_handle, capsys):
     )
     assert result == type(real_subject).__name__
     assert result == 'ClientSubject'
+
+
+def test_simple_proxy():
+    from software_patterns import Proxy
+    from typing import Callable
+    
+    RemoteCall = Callable[[int], int]
+    RemoteCallFactory = Callable[[], RemoteCall]
+
+    remote_call: RemoteCall = lambda x: x + 1
+
+    # Code that the developer writes
+    VALUE = 10
+    class ClientProxy(Proxy[RemoteCall]):
+        def __call__(self, x: int):
+            return self._proxy_subject(x + VALUE)
+        
+    proxy: ClientProxy = ClientProxy(remote_call)
+
+    assert remote_call(2) == 2 + 1
+    assert proxy(2) == 2 + VALUE + 1
