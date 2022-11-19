@@ -1,33 +1,6 @@
-import typing as t
-
 import pytest
 
 from software_patterns import Observer, Subject
-
-# class SubjectLike(t.Protocol):
-#     state: t.Any
-
-# class ObserverLike(t.Protocol):
-#     update: t.Callable[[SubjectLike, t.Any], None]
-
-
-# @pytest.fixture
-# def subject():
-#     from software_patterns import Subject
-
-#     return Subject
-
-
-# @pytest.fixture
-# def observer() -> t.Type[Observer]:
-#     """Observer Abstract Class that acts as an Observer interface.
-
-#     The Client code is expected to implement the 'update' method of the
-#     interface.
-#     """
-#     from software_patterns import Observer
-
-#     return Observer
 
 
 def test_observers_sanity_test():
