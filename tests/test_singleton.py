@@ -53,6 +53,7 @@ def assert_same_objects():
                 '__hash__',
                 '__sizeof__',
                 '__ge__',
+                '__getstate__',
             }
         ):
             print(attr_name)
