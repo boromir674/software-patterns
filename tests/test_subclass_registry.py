@@ -1,3 +1,5 @@
+import typing as t
+
 import pytest
 
 
@@ -21,28 +23,40 @@ def subclass_registry_module():
 
 
 @pytest.fixture
-def register_class(subclass_registry_module):
+def subclass_registry_class():
+    from software_patterns import SubclassRegistry
+
+    def get_subclass_registry_class() -> t.Type[SubclassRegistry]:
+        return SubclassRegistry
+
+    return get_subclass_registry_class
+
+
+@pytest.fixture
+def register_class():
+    from software_patterns import SubclassRegistry
+
     def _register_class(subclass_id: str, inherit=False):
-        class ParentClass(metaclass=subclass_registry_module.SubclassRegistry):
+        class ParentClass(metaclass=SubclassRegistry):
             pass
 
         if inherit:
 
             @ParentClass.register_as_subclass(subclass_id)
-            class Child(ParentClass):
+            class Child1(ParentClass):
                 pass
 
         else:
 
             @ParentClass.register_as_subclass(subclass_id)
-            class Child:
+            class Child2:
                 pass
 
-        child_instance = ParentClass.create(subclass_id)
+        child_instance: t.Any = ParentClass.create(subclass_id)
 
         return {
             'class_registry': ParentClass,
-            'child': Child,
+            'child': ParentClass.subclasses[subclass_id],
             'child_instance': child_instance,
         }
 
@@ -61,7 +75,7 @@ def use_metaclass(register_class, assert_correct_metaclass_behaviour):
     def _use_metaclass_in_scenario(subclass_id: str, inherit=False):
         classes = register_class(subclass_id, inherit=inherit)
         assert_correct_metaclass_behaviour(classes, subclass_id)
-        assert inherited_from_parent[inherit]
+        assert bool(inherited_from_parent[inherit])
         return classes['child_instance'], classes['child'], classes['class_registry']
 
     return _use_metaclass_in_scenario
@@ -77,11 +91,13 @@ def assert_correct_metaclass_behaviour():
     return assert_metaclass_behaviour
 
 
-def test_metaclass_usage(subclass_registry_module):
-    class ParentClass(metaclass=subclass_registry_module.SubclassRegistry):
+def test_metaclass_usage():
+    from software_patterns import SubclassRegistry
+
+    class ParentClass(metaclass=SubclassRegistry):
         pass
 
-    assert type(ParentClass) == subclass_registry_module.SubclassRegistry
+    assert type(ParentClass) == SubclassRegistry
     assert hasattr(ParentClass, 'subclasses')
     assert hasattr(ParentClass, 'create')
     assert hasattr(ParentClass, 'register_as_subclass')
@@ -109,7 +125,10 @@ def test_subclass_registry(use_metaclass, subclass_registry_module):
 
 
 def test_create_wrong_input(subclass_registry_module):
-    class ClassRegistry(metaclass=subclass_registry_module.SubclassRegistry):
+    from software_patterns import SubclassRegistry
+    from software_patterns.subclass_registry import InstantiationError
+
+    class ClassRegistry(metaclass=SubclassRegistry):
         pass
 
     @ClassRegistry.register_as_subclass('id-1')
@@ -121,12 +140,12 @@ def test_create_wrong_input(subclass_registry_module):
         def __init__(self, a):
             self.a = a
 
-    with pytest.raises(subclass_registry_module.InstantiationError):
+    with pytest.raises(InstantiationError):
         ClassRegistry.create('id-1', 'extra-argument')
 
-    with pytest.raises(subclass_registry_module.InstantiationError):
+    with pytest.raises(InstantiationError):
         ClassRegistry.create('id-1', extra_key='extra-kwarg')
 
     ClassRegistry.create('id-2', 'argument-a-provided')
-    with pytest.raises(subclass_registry_module.InstantiationError):
+    with pytest.raises(InstantiationError):
         ClassRegistry.create('id-2')

@@ -3,26 +3,25 @@ Introduction
 
 In these documentation pages we present the `software_patterns` Python package and the motivation
 for publishing it. The package currently host only a handful of software patterns, but they come with
-a test suite and full CI for local and remote integrations.
+a test suite and full CI for local and remote builds.
 
 
 Why would this project be useful to you?
 ========================================
+
+To develop your code, while abstracting common software patterns away and focus on important business logic.
+------------------------------------------------------------------------------------------------------------
+
+- To promote the DRY prinicipal in your codebase.
+- To promote the principal of Single Responsibility in your codebase.
+- To promote having Simple Units of Code in your codebase.
+- To keep technical debt low in your codebase.
 
 To Learn:
 ---------
 
 - You may study the source code to find out more about software design patterns.
 - You may wanna learn how to make an open source code contribution and find this codebase a good place to start.
-
-
-To use the python package and its contained software patterns in your project:
-------------------------------------------------------------------------------
-
-- To promote good software quality in your python codebase.
-- To promote the DRY prinicipal in your client code.
-- To promote the principal of Single Responsibility in your client code.
-- To promote having Simple Units of Code in your project.
 
 
 Why use this Python Patterns library?

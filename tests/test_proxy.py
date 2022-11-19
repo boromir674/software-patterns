@@ -2,13 +2,6 @@ import pytest
 
 
 @pytest.fixture
-def proxy_module():
-    from software_patterns import proxy
-
-    return proxy
-
-
-@pytest.fixture
 def dummy_handle():
     def handle(self, *args, **kwargs):
         return f'{type(self).__name__} handle request with args [{", ".join((str(_) for _ in args))}] and kwargs [{", ".join(f"{k}={v}" for k, v in kwargs.items())}]'
@@ -16,11 +9,12 @@ def dummy_handle():
     return handle
 
 
-def test_proxy_behaviour(proxy_module, dummy_handle, capsys):
-    prm = proxy_module
+def test_proxy_behaviour(dummy_handle, capsys):
+    from typing import List
+
+    from software_patterns import proxy as prm
 
     # replicate client code that wants to use the proxy pattern
-
     # Derive from class RealSubject or use 'python overloading' (use a class
     # that has a 'request' method with the same signature as ReadSubject.request)
     class ClientSubject(prm.ProxySubject):
@@ -57,7 +51,7 @@ def test_proxy_behaviour(proxy_module, dummy_handle, capsys):
     # use proxy in a scenario
 
     # First test what happens without using proxy
-    args = [1, 2]
+    args: List = [1, 2]
     kwargs = {'k1': 'v1'}
     result = real_subject.request(*args, **kwargs)
 
@@ -74,6 +68,7 @@ def test_proxy_behaviour(proxy_module, dummy_handle, capsys):
     result = proxy.request(*args, **kwargs)
 
     captured = capsys.readouterr()
+
     assert (
         captured.out
         == dummy_handle(*list([proxy, 'before'] + args), **kwargs)
