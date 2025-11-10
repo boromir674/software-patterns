@@ -11,19 +11,19 @@ __all__ = ['ObjectsPool']
 
 
 DictKey = Union[int, str]
-ObjectType = TypeVar('ObjectType')
+T = TypeVar('T')
 
 RuntimeBuildHashCallable = Callable[..., Union[int, str]]
 
 
 def adapt_build_hash(a_callable: RuntimeBuildHashCallable):
-    def build_hash(_self: ObjectType, *args, **kwargs):
+    def build_hash(_self: T, *args, **kwargs):
         return a_callable(*args, **kwargs)
 
     return build_hash
 
 
-class ObjectsPool(Generic[ObjectType]):
+class ObjectsPool(Generic[T]):
     """Cache objects and allow to query (the pool) using runtime arguments.
 
     Instances of the ObjectsPool class implement the Object Pool Software Design
@@ -60,7 +60,7 @@ class ObjectsPool(Generic[ObjectType]):
         [type]: [description]
     """
 
-    _objects: Dict[DictKey, ObjectType]
+    _objects: Dict[DictKey, T]
 
     user_supplied_callback: Dict[bool, Callable] = {
         True: lambda callback: callback,
@@ -69,7 +69,7 @@ class ObjectsPool(Generic[ObjectType]):
 
     def __init__(
         self,
-        callback: Callable[..., ObjectType],
+        callback: Callable[..., T],
         hash_callback: Optional[RuntimeBuildHashCallable] = None,
     ):
         self.constructor = callback
@@ -89,7 +89,7 @@ class ObjectsPool(Generic[ObjectType]):
             )
         )
 
-    def get_object(self, *args: Any, **kwargs: Any) -> ObjectType:
+    def get_object(self, *args: Any, **kwargs: Any) -> T:
         r"""Request an object from the pool.
 
         Get or create an object given the input arguments, which are used to
