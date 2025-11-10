@@ -17,7 +17,7 @@ jobs:
   # RUN TEST SUITE ON ALL PLATFORMS
   test_n_build:
     if: ${{ vars.TEST_JOB_ON != 'false' && !contains(github.event.head_commit.message, '_CI_SKIP_') }}
-    uses: boromir674/automated-workflows/.github/workflows/test_build.yml@test
+    uses: boromir674/automated-workflows/.github/workflows/test_build.yml@develop
     with:
       # Spawn Job per combination of factors in JOB_MATRIX
       # Python 3.7 has reached End of Life (EOL) on June 27th, 2023
