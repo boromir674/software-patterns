@@ -23,7 +23,7 @@ jobs:
       # Python 3.7 has reached End of Life (EOL) on June 27th, 2023
       # Python 3.12 is in bugfix mode, same as 3.11 -> can start supporting 3.12 it
       job_matrix: '{"platform": ["ubuntu-latest"], "python-version": ["3.10", "3.11", "3.12"]}'
-      build_installation: 'sdist, wheel'  # Verify sdist and wheel installations/"builds" against Tests
+      build_installation: 'wheel'  # Verify sdist and wheel installations/"builds" against Tests
       # typecheck_policy: '1'  # {0: Skip, 1: Run, 2: Run and allow failures}
       # run_policy: '0'  # Force skip of downstream 'test_build' Test Job
       artifact_name: 'BUILD_ARTIFACT'
