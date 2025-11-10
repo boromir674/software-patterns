@@ -1,6 +1,111 @@
+# INSTRUCT PIP to use Poetry as build backend (instead of legacy setuptools)
 [build-system]
-requires = ["setuptools >= 40.6.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+# change to [project] when migrating to uv
+[tool.poetry]
+name = "software_patterns"
+version = "2.0.0"
+description = "Software Design Patterns with types in Python."
+readme = "README.rst"
+# change to license = { file = "LICENSE" } when migarting to uv
+license = "AGPL-3.0-only"
+# change to authors = [ { name = "Konstantinos Lampridis", email = "boromir674@hotmail.com" } ] when migrating to uv
+authors = ["Konstantinos Lampridis <k.lampridis@hotmail.com>"]
+maintainers = ["Konstantinos Lampridis <k.lampridis@hotmail.com>"]
+# requires-python = ">=3.6"
+keywords = [
+	"software design patterns", "design patterns", "software patterns", "python library"
+]
+classifiers = [
+	"Development Status :: 5 - Production/Stable",
+	"Intended Audience :: Developers",
+	"Intended Audience :: End Users/Desktop",
+	"Intended Audience :: Science/Research",
+	"License :: OSI Approved :: GNU Affero General Public License v3",
+	"Natural Language :: English",
+	"Operating System :: Unix",
+	"Programming Language :: Python",
+	"Programming Language :: Python :: 3 :: Only",
+	"Programming Language :: Python :: 3.6",
+	"Programming Language :: Python :: 3.7",
+	"Programming Language :: Python :: 3.8",
+	"Programming Language :: Python :: 3.9",
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.11",
+	"Programming Language :: Python :: 3.12",
+	"Topic :: Documentation :: Sphinx",
+	"Topic :: Scientific/Engineering",
+	"Topic :: Software Development",
+	"Topic :: Software Development :: Libraries :: Python Modules",
+	"Topic :: System :: Software Distribution",
+	"Topic :: Utilities",
+	"Typing :: Typed"
+]
+
+[tool.poetry.dependencies]
+python = ">=3.6,<3.13"
+
+pytest = {version = "^9.0.0", optional = true, python = ">=3.10,<3.13"}
+pytest-cov = {version = "^7.0.0", optional = true, python = ">=3.10,<3.13"}
+
+
+
+# --- Reproduce old working env from requirements/docs.txt ---
+furo = {version = ">=2021.08.31,<2022.0.0", optional = true, python = ">=3.8"}
+sphinx = {version = ">=4.0,<5.0", optional = true, python = ">=3.8"}
+sphinx-argparse-cli = {version = ">=1.5,<2.0.0", optional = true, python = ">=3.8"}
+sphinx-autodoc-typehints = {version = ">=1.10,<2.0.0", optional = true, python = ">=3.8"}
+sphinxcontrib-spelling = {version = "==7.6.2", optional = true, python = ">=3.8"}
+sphinx-rtd-theme = {version = "==0.5.0", optional = true, python = ">=3.8"}
+
+[tool.poetry.extras]
+test = [
+    "pytest",
+    "pytest-cov",
+]
+docs = [
+	"sphinx",
+	"sphinx-argparse-cli",
+	"sphinx-autodoc-typehints",
+	"sphinx-rtd-theme",
+	"sphinxcontrib-spelling",
+	"furo",
+]
+
+[tool.check-manifest]
+ignore = [
+	"CHANGELOG.rst",
+	"docs/*",
+	"docs/patterns-implementations/*",
+	"docs/static/*",
+	"requirements/*",
+	"scripts/*.py",
+	"tox.ini",
+	".bettercodehub.yml",
+	".circleci/config.yml",
+	".coveragerc",
+	".DS_Store",
+	".gitignore",
+	".prospector.yml",
+	".pylintrc",
+	".readthedocs.yml",
+	".scrutinizer.yml",
+	".travis.yml"
+]
+
+
+
+## USE below when migrating to uv
+# [project.urls]
+# "Homepage" = "https://github.com/boromir674/software_patterns"
+# "Documentation" = "https://software-patterns.readthedocs.io/"
+# "Bug Tracker" = "https://github.com/boromir674/software-patterns/issues"
+# "Source Code" = "https://github.com/boromir674/software-patterns"
+
+# [project.optional-dependencies]
+
 
 
 ## Black formatting/linting
@@ -13,8 +118,17 @@ extend-exclude = '''
 
 
 [tool.isort]
-profile = 'black'
+profile = "black"
+line_length = 120
+skip = [".tox", "venv", "env", "env-dev"]
+default_section = "THIRDPARTY"
+known_first_party = ["src", "tests"]
 
 
-[tool.software-release]
-version_variable = "src/software_patterns/__init__.py:__version__"
+[tool.flake8]
+max_line_length = 120
+exclude = ".tox,venv,env,env-dev"
+
+
+[tool.pytest.ini_options]
+python_files = ["tests/test_*.py", "tests/*", "*/test_*.py"]
