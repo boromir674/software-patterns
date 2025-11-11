@@ -13,20 +13,21 @@ def test_observers_sanity_test():
 
 # def test_observer_as_constructor(observer: t.Type[Observer]):
 def test_observer_as_constructor():
+
+    import sys
     observer = Observer
 
     with pytest.raises(TypeError) as instantiation_from_interface_error:
         _observer_instance = observer()  # type: ignore[abstract]
 
-    import re
-
-    runtime_exception_message_reg = (
-        "Can't instantiate abstract class " "Observer with abstract methods? update"
-    )
-
-    assert re.match(
-        runtime_exception_message_reg, str(instantiation_from_interface_error.value)
-    )
+    error_msg = str(instantiation_from_interface_error.value)
+    if sys.version_info >= (3, 12):
+        expected = "Can't instantiate abstract class Observer without an implementation for abstract method 'update'"
+        assert error_msg == expected
+    else:
+        import re
+        runtime_exception_message_reg = r"Can't instantiate abstract class Observer with abstract methods? update"
+        assert re.match(runtime_exception_message_reg, error_msg)
 
 
 # def test_scenario(subject: t.Type[Subject], observer: t.Type[Observer]):
