@@ -50,16 +50,16 @@ python = ">=3.6,<3.13"
 pytest = {version = "^9.0.0", optional = true, python = ">=3.10,<3.13"}
 pytest-cov = {version = "^7.0.0", optional = true, python = ">=3.10,<3.13"}
 
-sphinx = {version = ">=7.0.0,<8.0.0", optional = true, python = ">=3.10,<3.13"}
-# poetry add --optional 'sphinx >=7.0.0, <8.0.0' --python='>=3.10,<3.13'
-# allow python 3.10 to build the docs, by not allowing sphinx 8.x
-sphinx-argparse-cli = {version = ">=1.5,<2.0.0", optional = true, python = ">=3.10,<3.13"}
-sphinx-autodoc-typehints = {version = ">=1.10,<2.0.0", optional = true, python = ">=3.10,<3.13"}
-sphinxcontrib-spelling = {version = "^8.0.1", optional = true, python = ">=3.10,<3.13"}
-furo = {version = ">=2021.08.31", optional = true, python = ">=3.8,<3.13"}
 
 
-# manual integration with "extras" pip feature (ie [test]) (in uv it is merged with deps group)
+# --- Reproduce old working env from requirements/docs.txt ---
+furo = {version = ">=2021.08.31,<2022.0.0", optional = true, python = ">=3.8"}
+sphinx = {version = ">=4.0,<5.0", optional = true, python = ">=3.8"}
+sphinx-argparse-cli = {version = ">=1.5,<2.0.0", optional = true, python = ">=3.8"}
+sphinx-autodoc-typehints = {version = ">=1.10,<2.0.0", optional = true, python = ">=3.8"}
+sphinxcontrib-spelling = {version = "==7.6.2", optional = true, python = ">=3.8"}
+sphinx-rtd-theme = {version = "==0.5.0", optional = true, python = ">=3.8"}
+
 [tool.poetry.extras]
 test = [
     "pytest",
@@ -69,6 +69,7 @@ docs = [
 	"sphinx",
 	"sphinx-argparse-cli",
 	"sphinx-autodoc-typehints",
+	"sphinx-rtd-theme",
 	"sphinxcontrib-spelling",
 	"furo",
 ]
