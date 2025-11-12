@@ -75,7 +75,7 @@ def use_metaclass(register_class, assert_correct_metaclass_behaviour):
 def assert_correct_metaclass_behaviour():
     def assert_metaclass_behaviour(classes, subclass_id):
         assert classes['class_registry'].subclasses[subclass_id] == classes['child']
-        assert type(classes['child_instance']) == classes['child']
+        assert type(classes['child_instance']) is classes['child']
         assert isinstance(classes['child_instance'], classes['child'])
 
     return assert_metaclass_behaviour
@@ -87,7 +87,8 @@ def test_metaclass_usage():
     class ParentClass(metaclass=SubclassRegistry):
         pass
 
-    assert type(ParentClass) == SubclassRegistry
+    assert type(ParentClass) is SubclassRegistry
+    assert isinstance(ParentClass, SubclassRegistry)
     assert hasattr(ParentClass, 'subclasses')
     assert hasattr(ParentClass, 'create')
     assert hasattr(ParentClass, 'register_as_subclass')

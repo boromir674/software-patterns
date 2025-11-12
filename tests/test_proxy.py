@@ -88,7 +88,8 @@ def test_simple_proxy():
     from software_patterns import Proxy
 
     RemoteCall = Callable[[int], int]
-    remote_call: RemoteCall = lambda x: x + 1
+    def remote_call(x):
+        return x + 1
 
     # Code that the developer writes
     VALUE = 10
@@ -110,7 +111,8 @@ def test_proxy_as_instance():
 
     RemoteCall = Callable[[int], int]
 
-    remote_call: RemoteCall = lambda x: x + 1
+    def remote_call(x):
+        return x + 1
 
     # Code that the developer writes
     VALUE = 10
