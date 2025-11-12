@@ -60,7 +60,7 @@ jobs:
   code_visualization:
     name: Code Visualization of Python Imports as Graphs, in .svg
     if: ${{ vars.CODE_VIZ_JOB_ON != 'false' }}
-    uses: boromir674/automated-workflows/.github/workflows/python_imports.yml@v1.3.0
+    uses: boromir674/automated-workflows/.github/workflows/python_imports.yml@v1.15.0
     with:
       run_policy: ${{ vars.CODE_VIZ_JOB_ON == 'true' && '1' || vars.CODE_VIZ_POLICY || '2' }}
       branches: 'main, master, dev'
