@@ -50,11 +50,11 @@ jobs:
   ### DOCS BUILD/TEST - DOCUMENTATION SITE ###
   docs:
     name: Build Documentation
-    uses: boromir674/automated-workflows/.github/workflows/policy_docs.yml@v1.3.0
+    uses: boromir674/automated-workflows/.github/workflows/policy_docs.yml@v1.15.0
     with:
       run_policy: '2'
       python_version: '3.11'
-      command: 'tox -e docs -vv -s false'
+      command: 'REQS_FILE=reqs-docs.txt tox -e pin-deps -- -E docs && tox -e docs -vv -s false'
 
   ### DRAW PYTHON DEPENDENCY GRAPHS ###
   code_visualization:
