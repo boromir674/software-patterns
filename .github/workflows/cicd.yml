@@ -86,7 +86,7 @@ jobs:
     uses: boromir674/automated-workflows/.github/workflows/pypi_env.yml@8e97f596067fcbbaa0a6927ec1ee47dce4ab5f1a
     if: always() && vars.GH_RELEASE_JOB_ON != 'false' && (
       vars.GH_RELEASE_JOB_ON == 'true' ||
-      (needs.signal_deploy.outputs.AUTOMATED_DEPLOY == 'true' && needs.*.result == 'success'))
+      needs.signal_deploy.outputs.AUTOMATED_DEPLOY == 'true')
     with:
       distro_name: cookiecutter_python
       distro_version: ${{ needs.test_n_build.outputs.PEP_VERSION }}
