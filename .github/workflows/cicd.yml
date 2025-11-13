@@ -83,17 +83,17 @@ jobs:
   ## JOB: PYPI UPLOAD ##
   pypi_publish:
     needs: signal_deploy
-    uses: boromir674/automated-workflows/.github/workflows/pypi_env.yml@v1.15.0
+    uses: boromir674/automated-workflows/.github/workflows/pypi_env.yml@develop
     if: always() && vars.GH_RELEASE_JOB_ON != 'false' && (
       vars.GH_RELEASE_JOB_ON == 'true' ||
       needs.signal_deploy.outputs.AUTOMATED_DEPLOY == 'true')
     with:
-      distro_name: cookiecutter_python
+      should_trigger: ${{ needs.signal_deploy.outputs.AUTOMATED_DEPLOY == 'true' }}
+      distro_name: software_patterns
       distro_version: ${{ needs.test_n_build.outputs.PEP_VERSION }}
       pypi_env: '${{ needs.signal_deploy.outputs.ENVIRONMENT_NAME }}'
       require_wheel: true
       allow_existing: true
-      should_trigger: ${{ needs.signal_deploy.outputs.AUTOMATED_DEPLOY == 'true' }}
     secrets:
       TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
 
