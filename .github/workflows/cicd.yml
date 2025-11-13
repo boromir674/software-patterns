@@ -83,7 +83,7 @@ jobs:
   ## JOB: PYPI UPLOAD ##
   pypi_publish:
     needs: signal_deploy
-    uses: boromir674/automated-workflows/.github/workflows/pypi_env.yml@8e97f596067fcbbaa0a6927ec1ee47dce4ab5f1a
+    uses: boromir674/automated-workflows/.github/workflows/pypi_env.yml@v1.15.0
     if: always() && vars.GH_RELEASE_JOB_ON != 'false' && (
       vars.GH_RELEASE_JOB_ON == 'true' ||
       needs.signal_deploy.outputs.AUTOMATED_DEPLOY == 'true')
