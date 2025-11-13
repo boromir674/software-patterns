@@ -107,7 +107,7 @@ jobs:
     name: 'GH Release'
     with:
       tag: ${{ github.ref_name }}
-      artifact: 'BUILD_ARTIFACT'
+      # artifact: 'BUILD_ARTIFACT'  # do not include a tarball/wheel artifact in the GH Release
       draft: ${{ needs.signal_deploy.outputs.ENVIRONMENT_NAME == 'TEST_DEPLOYMENT' }}
     secrets:
       # passing the GH_TOKEN PAT, to render in GH as User, instead of bot
