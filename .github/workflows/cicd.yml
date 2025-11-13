@@ -34,6 +34,8 @@ jobs:
     uses: ./.github/workflows/codecov-upload.yml
     with:
       coverage_artifact: ${{ needs.test_n_build.outputs.COVERAGE_ARTIFACT }}
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   ### STATIC CODE ANALYSIS & LINTING ###
   lint:
