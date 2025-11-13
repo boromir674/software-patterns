@@ -90,7 +90,7 @@ jobs:
     with:
       should_trigger: ${{ needs.signal_deploy.outputs.AUTOMATED_DEPLOY == 'true' }}
       distro_name: software_patterns
-      distro_version: ${{ needs.aggregate_pep_version.outputs.PEP_VERSION }}
+      distro_version: ${{ needs.test_n_build.outputs.PEP_VERSION }}
       pypi_env: '${{ needs.signal_deploy.outputs.ENVIRONMENT_NAME }}'
       require_wheel: true
       allow_existing: true
