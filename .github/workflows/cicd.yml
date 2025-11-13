@@ -26,7 +26,7 @@ jobs:
       build_installation: 'wheel'  # Verify sdist and wheel installations/"builds" against Tests
       # typecheck_policy: '1'  # {0: Skip, 1: Run, 2: Run and allow failures}
       # run_policy: '0'  # Force skip of downstream 'test_build' Test Job
-      artifact_name: 'BUILD_ARTIFACT'
+      # artifact_name: 'BUILD_ARTIFACT'
 
   codecov_coverage_host:
     needs: test_n_build
