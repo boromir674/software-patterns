@@ -110,5 +110,5 @@ jobs:
       artifact: 'BUILD_ARTIFACT'
       draft: ${{ needs.signal_deploy.outputs.ENVIRONMENT_NAME == 'TEST_DEPLOYMENT' }}
     secrets:
-      # passing the GH_TOKEN PAT, to render in GH as ie: 'boromir674 released this yesterday', instead of 'github-actions released this yesterday'
+      # passing the GH_TOKEN PAT, to render in GH as User, instead of bot
       gh_token: ${{ secrets.GH_TOKEN }}
