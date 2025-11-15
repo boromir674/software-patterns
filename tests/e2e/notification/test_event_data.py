@@ -1,9 +1,11 @@
-from software_patterns import Subject, Observer
+from software_patterns import Observer, Subject
+
 
 def test_event_data_passing():
     class EventObserver(Observer):
         def __init__(self):
             self.received_data = None
+
         def update(self, subject):
             # Try to access event data
             self.received_data = getattr(subject, 'event_data', None)

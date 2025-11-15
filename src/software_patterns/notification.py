@@ -84,8 +84,8 @@ class AddObserversResult:
 
 
 class Subject(SubjectInterface, Generic[T]):
-    import inspect
     import asyncio
+    import inspect
 
     """Concrete Subject which owns an important state and notifies observers.
 
