@@ -6,7 +6,7 @@ build-backend = "poetry.core.masonry.api"
 # change to [project] when migrating to uv
 [tool.poetry]
 name = "software_patterns"
-version = "2.0.0"
+version = "2.0.1"
 description = "Software Design Patterns with types in Python."
 readme = "README.rst"
 # change to license = { file = "LICENSE" } when migarting to uv
