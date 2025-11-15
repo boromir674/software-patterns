@@ -10,16 +10,16 @@ def test_instance_listener():
         def update(self, subject):
             self.updated = True
 
-    client = ClientObserver()
+    listener = ClientObserver()
 
     subject = Subject([])
-    subject.attach(client)
+    subject.attach(listener)
 
     # WHEN subject notifies
     subject.notify()
 
     # THEN instance method is called
-    assert client.updated
+    assert listener.updated
 
 
 def test_plain_instance_listener():
@@ -31,13 +31,34 @@ def test_plain_instance_listener():
         def update(self, subject):
             self.updated = True
 
-    client = ClientObserver()
+    listener = ClientObserver()
 
     subject = Subject([])
-    subject.attach(client)
+    subject.attach(listener)
 
     # WHEN subject notifies
     subject.notify()
 
     # THEN instance method is called
-    assert client.updated
+    assert listener.updated
+
+
+def test_dynamic_class_instance_listener():
+    from software_patterns import Subject
+
+    _state = 0
+
+    def _update(self, subject):
+        nonlocal _state
+        _state += 1
+
+    listener = type("Listener", (), {"update": _update})()
+
+    subject = Subject([])
+    subject.attach(listener)
+
+    # WHEN subject notifies
+    subject.notify()
+
+    # THEN instance method is called
+    assert _state == 1
