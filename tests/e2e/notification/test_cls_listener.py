@@ -1,4 +1,4 @@
-from software_patterns import Subject, Observer
+from software_patterns import Subject
 
 
 def test_classmethod_listener():

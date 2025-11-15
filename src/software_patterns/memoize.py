@@ -4,6 +4,7 @@ Memoize is implemented using an Object Pool which is queried by a key which is
 the result of computing a hash given runtime arguments.
 
 """
+
 import types
 from typing import Any, Callable, Dict, Generic, Optional, TypeVar, Union
 

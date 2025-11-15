@@ -1,4 +1,4 @@
-from software_patterns import Subject, Observer
+from software_patterns import Observer, Subject
 
 
 def test_instance_listener():
@@ -6,6 +6,7 @@ def test_instance_listener():
     class ClientObserver(Observer):
         def __init__(self):
             self.updated = False
+
         def update(self, subject):
             self.updated = True
 
@@ -26,6 +27,7 @@ def test_plain_instance_listener():
     class ClientObserver:
         def __init__(self):
             self.updated = False
+
         def update(self, subject):
             self.updated = True
 

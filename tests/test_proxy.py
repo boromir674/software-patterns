@@ -88,6 +88,7 @@ def test_simple_proxy():
     from software_patterns import Proxy
 
     RemoteCall = Callable[[int], int]
+
     def remote_call(x):
         return x + 1
 

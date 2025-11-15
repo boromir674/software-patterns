@@ -74,6 +74,15 @@ class Observer(ObserverInterface, ABC):
     pass
 
 
+# Result object for add method
+class AddObserversResult:
+    """Result of adding multiple observers: contains added and failed lists."""
+
+    def __init__(self, added: List[ObserverInterface], failed: List[ObserverInterface]):
+        self.added = added
+        self.failed = failed
+
+
 class Subject(SubjectInterface, Generic[T]):
     """Concrete Subject which owns an important state and notifies observers.
 
@@ -129,6 +138,11 @@ class Subject(SubjectInterface, Generic[T]):
         self._state = StateVariableType
 
     def attach(self, observer: ObserverInterface) -> None:
+        # Early fail if observer does not have an 'update' callable
+        if not callable(getattr(observer, 'update', None)):
+            raise TypeError(
+                f"Attached observer {observer!r} does not have a callable 'update' method."
+            )
         self._observers.append(observer)
 
     def detach(self, observer: ObserverInterface) -> None:
@@ -139,8 +153,28 @@ class Subject(SubjectInterface, Generic[T]):
             observer.update(self)
 
     def add(self, *observers):
-        """Subscribe multiple observers at once."""
-        self._observers.extend(list(observers))
+        """Subscribe multiple observers at once. Returns AddObserversResult.
+
+        In case some observers are incompatible (do not have 'update' method), they
+        are ignored and returned as part of the 'failed' list in the result.
+
+        Args:
+            observers (ObserverInterface): variable number of observers to attach
+
+        Returns:
+            AddObserversResult: with 'added' and 'failed' lists of observers
+        """
+        # find compatible observers/listeners/subscribers, by checking the 'update' attribute
+        compatible_listeners = [
+            obs for obs in observers if callable(getattr(obs, 'update', None))
+        ]
+
+        # add compatible listenrs to list of subscribers
+        self._observers.extend(compatible_listeners)
+
+        return AddObserversResult(
+            compatible_listeners, [x for x in observers if x not in compatible_listeners]
+        )
 
     @property
     def state(self) -> StateVariableType:
