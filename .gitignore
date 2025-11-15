@@ -37,3 +37,15 @@ reqs-docs.txt
 dist-dir/
 wheel-dir/
 *\.whl
+TODO.md
+requirements-poetry.txt
+poetry-checksums.txt
+poetry-artifacts.txt
+
+extras_requirements/
+*.tar.gz.txt
+requirements-uv*
+uv-artifacts.txt
+uv-checksums.txt
+d.txt
+requirements.txt
