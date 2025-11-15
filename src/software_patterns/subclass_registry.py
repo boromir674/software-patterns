@@ -77,7 +77,7 @@ class SubclassRegistry(type, Generic[T]):
             raise UnknownClassError(
                 f'Bad "{str(cls.__name__)}" subclass request; requested subclass with identifier '
                 f'{str(subclass_identifier)}, but known identifiers are '
-                f'[{", ".join(str(subclass_id) for subclass_id in cls.subclasses.keys())}]'
+                f'[{", ".join(str(subclass_id) for subclass_id in cls.subclasses)}]'
             )
         try:
             return cls.subclasses[subclass_identifier](*args, **kwargs)

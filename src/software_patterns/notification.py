@@ -30,8 +30,8 @@ from typing import Generic, List, TypeVar, Union
 __all__ = ['Subject', 'Observer']
 
 
-StateType = TypeVar('StateType')
-StateVariableType = Union[StateType, None]
+T = TypeVar('T')
+StateVariableType = Union[T, None]
 
 
 class ObserverInterface(ABC):
@@ -74,7 +74,7 @@ class Observer(ObserverInterface, ABC):
     pass
 
 
-class Subject(SubjectInterface, Generic[StateType]):
+class Subject(SubjectInterface, Generic[T]):
     """Concrete Subject which owns an important state and notifies observers.
 
     The subject can be used to build the data encapsulating the event being
@@ -152,7 +152,7 @@ class Subject(SubjectInterface, Generic[StateType]):
         return self._state
 
     @state.setter
-    def state(self, state: StateType):
+    def state(self, state: T):
         """Set the state of the Subject.
 
         Args:

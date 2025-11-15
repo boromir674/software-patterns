@@ -31,3 +31,9 @@ build/
 dependency-graphs/
 test-results/
 uml-diagrams/
+wip.txt
+reqs.txt
+reqs-docs.txt
+dist-dir/
+wheel-dir/
+*\.whl
