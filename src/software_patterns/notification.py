@@ -84,6 +84,9 @@ class AddObserversResult:
 
 
 class Subject(SubjectInterface, Generic[T]):
+    import inspect
+    import asyncio
+
     """Concrete Subject which owns an important state and notifies observers.
 
     The subject can be used to build the data encapsulating the event being
@@ -151,6 +154,20 @@ class Subject(SubjectInterface, Generic[T]):
     def notify(self) -> None:
         for observer in self._observers:
             observer.update(self)
+
+    async def notify_async(self) -> None:
+        """Notify all observers, awaiting async ones and calling sync ones."""
+        tasks = []
+        for observer in self._observers:
+            update = getattr(observer, 'update', None)
+            if update is None:
+                continue
+            if self.inspect.iscoroutinefunction(update):
+                tasks.append(update(self))
+            else:
+                update(self)
+        if tasks:
+            await self.asyncio.gather(*tasks)
 
     def add(self, *observers):
         """Subscribe multiple observers at once. Returns AddObserversResult.
