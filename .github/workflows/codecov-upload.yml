@@ -21,12 +21,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Download the coverage artifact
-      - name: Download Coverage Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ inputs.coverage_artifact }}
-
       # Get the Codecov binary
       - name: Get Codecov Binary
         run: |

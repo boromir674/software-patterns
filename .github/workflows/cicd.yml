@@ -17,16 +17,22 @@ jobs:
   # RUN TEST SUITE ON ALL PLATFORMS
   test_n_build:
     if: ${{ vars.TEST_JOB_ON != 'false' && !contains(github.event.head_commit.message, '_CI_SKIP_') }}
-    uses: boromir674/automated-workflows/.github/workflows/test_build.yml@develop
+    uses: boromir674/automated-workflows/.github/workflows/python-build.yml@develop
     with:
-      # Spawn Job per combination of factors in JOB_MATRIX
-      # Python 3.7 has reached End of Life (EOL) on June 27th, 2023
-      # Python 3.12 is in bugfix mode, same as 3.11 -> can start supporting 3.12 it
-      job_matrix: '{"platform": ["ubuntu-latest"], "python-version": ["3.10", "3.11", "3.12"]}'
-      build_installation: 'wheel'  # Verify sdist and wheel installations/"builds" against Tests
-      # typecheck_policy: '1'  # {0: Skip, 1: Run, 2: Run and allow failures}
-      # run_policy: '0'  # Force skip of downstream 'test_build' Test Job
-      # artifact_name: 'BUILD_ARTIFACT'
+      job_matrix: "{\"platform\": [\"ubuntu-latest\", \"macos-latest\"], \"python-version\": [\"3.9\", \"3.10\", \"3.11\", \"3.12\"]}"
+      distribute_tests: false  # avoid perf decrease due to test distribution overhead
+      # tests are too fast so cpu distribution overhead increases total test execution time
+
+    # uses: boromir674/automated-workflows/.github/workflows/test_build.yml@develop
+    # with:
+    #   # Spawn Job per combination of factors in JOB_MATRIX
+    #   # Python 3.7 has reached End of Life (EOL) on June 27th, 2023
+    #   # Python 3.12 is in bugfix mode, same as 3.11 -> can start supporting 3.12 it
+    #   job_matrix: '{"platform": ["ubuntu-latest"], "python-version": ["3.10", "3.11", "3.12"]}'
+    #   build_installation: 'wheel'  # Verify sdist and wheel installations/"builds" against Tests
+    #   # typecheck_policy: '1'  # {0: Skip, 1: Run, 2: Run and allow failures}
+    #   # run_policy: '0'  # Force skip of downstream 'test_build' Test Job
+    #   # artifact_name: 'BUILD_ARTIFACT'
 
   codecov_coverage_host:
     needs: test_n_build
@@ -52,11 +58,19 @@ jobs:
   ### DOCS BUILD/TEST - DOCUMENTATION SITE ###
   docs:
     name: Build Documentation
-    uses: boromir674/automated-workflows/.github/workflows/policy_docs.yml@v1.15.0
+    uses: boromir674/automated-workflows/.github/workflows/docs-job.yml@develop
     with:
-      run_policy: '2'
+      build_tool: 'sphinx'
+      default_trigger: true
+      override: '${{ vars.OV_DOCS }}'
       python_version: '3.11'
-      command: 'REQS_FILE=reqs-docs.txt tox -e pin-deps -- -E docs && tox -e docs -vv -s false'
+      upload_distro: true
+
+    # uses: boromir674/automated-workflows/.github/workflows/policy_docs.yml@v1.15.0
+    # with:
+    #   run_policy: '2'
+    #   python_version: '3.11'
+    #   command: 'REQS_FILE=reqs-docs.txt tox -e pin-deps -- -E docs && tox -e docs -vv -s false'
 
   ### DRAW PYTHON DEPENDENCY GRAPHS ###
   code_visualization:
@@ -77,7 +91,7 @@ jobs:
     if: ${{ startsWith(github.event.ref, 'refs/tags/v') }}
     uses: ./.github/workflows/signal-deploy.yml
     with:
-      main_branch: main
+      main_branch: master
       release_branch: release
 
   ## JOB: PYPI UPLOAD ##
