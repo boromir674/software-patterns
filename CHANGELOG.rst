@@ -2,6 +2,15 @@
 Changelog
 =========
 
+
+2.0.1 (2025-11-15)
+==================
+
+Revive project.  
+Migrate to `pyproject.toml` and adopt powerfull CI/CD in `Github Actions`.
+Adopt modern python toolchain.
+
+
 2.0.0 (2022-11-19)
 ==================
 
