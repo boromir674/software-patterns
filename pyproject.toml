@@ -3,7 +3,7 @@
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-# change to [project] when migrating to uv
+
 [project]
 name = "software_patterns"
 version = "2.0.1"
@@ -47,9 +47,9 @@ requires-python = ">=3.6, <3.13"
 
 [project.optional-dependencies]
 test = [
-    "pytest>=8.0.0,<10.0.0 ; python_full_version >= '3.9' and python_full_version < '3.13'",
-    "pytest-asyncio>=1.2.0,<2.0.0 ; python_full_version >= '3.9' and python_full_version < '3.13'",
-    "pytest-cov>=7.0.0,<8.0.0 ; python_full_version >= '3.9' and python_full_version < '3.13'",
+    "pytest>=8.0.0,<10.0.0 ; python_full_version >= '3.8' and python_full_version < '3.13'",
+    "pytest-asyncio>=0.20.3,<2.0.0 ; python_full_version >= '3.8' and python_full_version < '3.13'",
+    "pytest-cov>=5.0.0,<8.0.0 ; python_full_version >= '3.8' and python_full_version < '3.13'",
 ]
 docs = [
     "beautifulsoup4>=4.8.2,<4.9.0 ; python_full_version >= '3.7' and python_full_version < '3.13'",
