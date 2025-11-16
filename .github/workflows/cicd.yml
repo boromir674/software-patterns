@@ -19,7 +19,7 @@ jobs:
     if: ${{ vars.TEST_JOB_ON != 'false' && !contains(github.event.head_commit.message, '_CI_SKIP_') }}
     uses: boromir674/automated-workflows/.github/workflows/python-build.yml@develop
     with:
-      job_matrix: "{\"platform\": [\"ubuntu-latest\", \"macos-latest\"], \"python-version\": [\"3.9\", \"3.10\", \"3.11\", \"3.12\"]}"
+      job_matrix: "{\"platform\": [\"ubuntu-latest\", \"macos-latest\"], \"python-version\": [\"3.8\", \"3.9\", \"3.10\", \"3.11\", \"3.12\"]}"
       distribute_tests: false  # avoid perf decrease due to test distribution overhead
       # tests are too fast so cpu distribution overhead increases total test execution time
 
