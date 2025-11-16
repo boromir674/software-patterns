@@ -63,4 +63,4 @@ def test_composition_with_incompatible_listener():
     with pytest.raises(
         TypeError, match="Attached observer .* does not have a callable 'update' method."
     ):
-        _client = ClientObserver()
+        ClientObserver()
