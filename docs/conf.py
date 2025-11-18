@@ -22,7 +22,7 @@ copyright = '2021, Konstantinos Lampridis'
 author = 'Konstantinos Lampridis'
 
 # The full version, including alpha/beta/rc tags
-release = '2.0.1'
+release = '2.1.0'
 
 # -- General configuration ---------------------------------------------------
 

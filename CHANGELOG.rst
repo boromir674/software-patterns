@@ -3,6 +3,41 @@ Changelog
 =========
 
 
+2.1.0 (2025-11-17)
+==================
+
+Support `async` listeners in the Notification Pattern.
+
+Changes
+^^^^^^^
+
+feature
+"""""""
+- async listener support  in 'notification'
+- check listener at runtime if is compatible
+
+fix
+"""
+- satisfy propespector
+- verify a listener's failure does not hinder other listeners, with async
+- add an event emulation scenario
+- more comprehensive consumer code use cases
+- add e2e notification listener tests
+
+chore
+""""""
+- update gitignore
+
+ci
+"""
+- migrate ci to uv-based workflows
+
+build
+"""""
+- migrate all dependencies and extras to uv
+
+
+
 2.0.1 (2025-11-15)
 ==================
 

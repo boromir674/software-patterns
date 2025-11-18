@@ -3,75 +3,66 @@
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-# change to [project] when migrating to uv
-[tool.poetry]
+
+[project]
 name = "software_patterns"
-version = "2.0.1"
+version = "2.1.0"
 description = "Software Design Patterns with types in Python."
 readme = "README.rst"
-# change to license = { file = "LICENSE" } when migarting to uv
-license = "AGPL-3.0-only"
-# change to authors = [ { name = "Konstantinos Lampridis", email = "boromir674@hotmail.com" } ] when migrating to uv
-authors = ["Konstantinos Lampridis <k.lampridis@hotmail.com>"]
-maintainers = ["Konstantinos Lampridis <k.lampridis@hotmail.com>"]
-# requires-python = ">=3.6"
+license = { file = "LICENSE" }
+authors = [ { name = "Konstantinos Lampridis", email = "boromir674@hotmail.com" } ]
+maintainers = [ { name = "Konstantinos Lampridis", email = "boromir674@hotmail.com" } ]
 keywords = [
-	"software design patterns", "design patterns", "software patterns", "python library"
+    "software design patterns", "design patterns", "software patterns", "python library"
 ]
 classifiers = [
-	"Development Status :: 5 - Production/Stable",
-	"Intended Audience :: Developers",
-	"Intended Audience :: End Users/Desktop",
-	"Intended Audience :: Science/Research",
-	"License :: OSI Approved :: GNU Affero General Public License v3",
-	"Natural Language :: English",
-	"Operating System :: Unix",
-	"Programming Language :: Python",
-	"Programming Language :: Python :: 3 :: Only",
-	"Programming Language :: Python :: 3.6",
-	"Programming Language :: Python :: 3.7",
-	"Programming Language :: Python :: 3.8",
-	"Programming Language :: Python :: 3.9",
-	"Programming Language :: Python :: 3.10",
-	"Programming Language :: Python :: 3.11",
-	"Programming Language :: Python :: 3.12",
-	"Topic :: Documentation :: Sphinx",
-	"Topic :: Scientific/Engineering",
-	"Topic :: Software Development",
-	"Topic :: Software Development :: Libraries :: Python Modules",
-	"Topic :: System :: Software Distribution",
-	"Topic :: Utilities",
-	"Typing :: Typed"
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+    "Natural Language :: English",
+    "Operating System :: Unix",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Documentation :: Sphinx",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Software Distribution",
+    "Topic :: Utilities",
+    "Typing :: Typed"
 ]
 
-[tool.poetry.dependencies]
-python = ">=3.6,<3.13"
-
-pytest = {version = "^9.0.0", optional = true, python = ">=3.10,<3.13"}
-pytest-cov = {version = "^7.0.0", optional = true, python = ">=3.10,<3.13"}
+#### ALLOWED PYTHON ####
+requires-python = ">=3.6, <3.13"
 
 
-
-# --- Reproduce old working env from requirements/docs.txt ---
-furo = {version = ">=2021.08.31,<2022.0.0", optional = true, python = ">=3.8"}
-sphinx = {version = ">=4.0,<5.0", optional = true, python = ">=3.8"}
-sphinx-argparse-cli = {version = ">=1.5,<2.0.0", optional = true, python = ">=3.8"}
-sphinx-autodoc-typehints = {version = ">=1.10,<2.0.0", optional = true, python = ">=3.8"}
-sphinxcontrib-spelling = {version = "==7.6.2", optional = true, python = ">=3.8"}
-sphinx-rtd-theme = {version = "==0.5.0", optional = true, python = ">=3.8"}
-
-[tool.poetry.extras]
+[project.optional-dependencies]
 test = [
-    "pytest",
-    "pytest-cov",
+    "pytest>=8.0.0,<10.0.0 ; python_full_version >= '3.8' and python_full_version < '3.13'",
+    "pytest-asyncio>=0.20.3,<2.0.0 ; python_full_version >= '3.8' and python_full_version < '3.13'",
+    "pytest-cov>=5.0.0,<8.0.0 ; python_full_version >= '3.8' and python_full_version < '3.13'",
 ]
 docs = [
-	"sphinx",
-	"sphinx-argparse-cli",
-	"sphinx-autodoc-typehints",
-	"sphinx-rtd-theme",
-	"sphinxcontrib-spelling",
-	"furo",
+    "beautifulsoup4>=4.8.2,<4.9.0 ; python_full_version >= '3.7' and python_full_version < '3.13'",
+    "furo>=2021.11.23,<2024.5.6",
+    "furo>=2021.8.31,<2024.5.6 ; python_full_version >= '3.8'",
+    # "sphinx>=4.0,<5.0 ; python_full_version >= '3.8'",
+    "sphinx>=5.0,<6.0 ; python_full_version >= '3.10' and python_full_version < '3.13'",
+    "sphinx-argparse-cli>=1.5,<2.0.0 ; python_full_version >= '3.8'",
+    "sphinx-autodoc-typehints>=1.10,<2.0.0 ; python_full_version >= '3.8'",
+    "sphinx-rtd-theme==0.5.0 ; python_full_version >= '3.8'",
+    "sphinxcontrib-applehelp>=1.0.8,<2.0.0 ; python_full_version >= '3.9' and python_full_version < '3.13'",
+    "sphinxcontrib-spelling==7.6.2 ; python_full_version >= '3.8'",
+    "typing-extensions>=4.10.0,<5.0.0 ; python_full_version >= '3.9' and python_full_version < '3.13'",
 ]
 
 [tool.check-manifest]
@@ -98,13 +89,11 @@ ignore = [
 
 
 ## USE below when migrating to uv
-# [project.urls]
-# "Homepage" = "https://github.com/boromir674/software_patterns"
-# "Documentation" = "https://software-patterns.readthedocs.io/"
-# "Bug Tracker" = "https://github.com/boromir674/software-patterns/issues"
-# "Source Code" = "https://github.com/boromir674/software-patterns"
-
-# [project.optional-dependencies]
+[project.urls]
+"Homepage" = "https://github.com/boromir674/software_patterns"
+"Documentation" = "https://software-patterns.readthedocs.io/"
+"Bug Tracker" = "https://github.com/boromir674/software-patterns/issues"
+"Source Code" = "https://github.com/boromir674/software-patterns"
 
 
 
